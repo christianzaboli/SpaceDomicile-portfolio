@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import MyHeader from "../Components/MacroComponents/MyHeader";
 import MyFooter from "../Components/MacroComponents/MyFooter";
-export default function DefaultLayout({setDrawerOpen}) {
+export default function DefaultLayout() {
   return (
     <>
-      <MyHeader setDrawerOpen={setDrawerOpen} />
+      <MyHeader />
       <main>
         <Outlet />
       </main>

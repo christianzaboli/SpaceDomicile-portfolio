@@ -1,5 +1,5 @@
 import NavBar from "../MicroComponents/NavBar";
-export default function MyHeader({ setDrawerOpen }) {
+export default function MyHeader() {
   var prevScrollpos = window.pageYOffset;
   window.onscroll = function () {
     var currentScrollPos = window.pageYOffset;
@@ -12,7 +12,7 @@ export default function MyHeader({ setDrawerOpen }) {
   };
   return (
     <header className="back-header" id="navbar" style={{ top: "0px" }}>
-      <NavBar setDrawerOpen={setDrawerOpen} />
+      <NavBar />
     </header>
   );
 }

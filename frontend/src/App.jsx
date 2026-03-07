@@ -1,6 +1,5 @@
 // DIPENDENZE REACT
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 // LAYOUT
 import DefaultLayout from "./Layout/DefaultLayout";
@@ -8,6 +7,7 @@ import DefaultLayout from "./Layout/DefaultLayout";
 // CONTEXTS
 import { DefaultProvider } from "./Contexts/DefaultContext";
 import { CartProvider } from "./Contexts/CartContext";
+import useDrawer, { DrawerProvider } from "./hooks/useDrawer";
 
 // PAGINE
 import HomePage from "./Pages/HomePage";
@@ -26,22 +26,16 @@ import Success from "./Pages/Success";
 //components
 import CartDrawer from "./Components/MicroComponents/CartDrawer";
 
-function App() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  useEffect(() => {
-    if (drawerOpen) {
-      document.body.classList.add("no-scroll");
-    } else {
-      document.body.classList.remove("no-scroll");
-    }
-  }, [drawerOpen]);
+function AppContent() {
+  const { drawerOpen, closeDrawer } = useDrawer();
+
   return (
     <>
-      <CartProvider setDrawerOpen={setDrawerOpen}>
+      <CartProvider>
         <DefaultProvider>
           <BrowserRouter>
             <Routes>
-              <Route element={<DefaultLayout setDrawerOpen={setDrawerOpen} />}>
+              <Route element={<DefaultLayout />}>
                 <Route index element={<HomePage />} />
                 <Route path="galaxies">
                   <Route index element={<GalaxiesPage />} />
@@ -58,14 +52,19 @@ function App() {
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>
-            <CartDrawer
-              open={drawerOpen}
-              onClose={() => setDrawerOpen(false)}
-            />
+            <CartDrawer open={drawerOpen} onClose={closeDrawer} />
           </BrowserRouter>
         </DefaultProvider>
       </CartProvider>
     </>
+  );
+}
+
+function App() {
+  return (
+    <DrawerProvider>
+      <AppContent />
+    </DrawerProvider>
   );
 }
 

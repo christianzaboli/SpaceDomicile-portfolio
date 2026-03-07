@@ -3,7 +3,7 @@ import Toast from "../Components/MicroComponents/Toast";
 
 const CartContext = createContext();
 
-export function CartProvider({ children, setDrawerOpen }) {
+export function CartProvider({ children }) {
   const [items, setItems] = useState({});
   const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
@@ -93,7 +93,6 @@ export function CartProvider({ children, setDrawerOpen }) {
         onQtyChange,
         loading,
         clearCart,
-        setDrawerOpen,
       }}
     >
       {children}
@@ -101,7 +100,6 @@ export function CartProvider({ children, setDrawerOpen }) {
         show={showToast}
         message={toastMessage}
         onClose={() => setShowToast(false)}
-        setDrawerOpen={setDrawerOpen}
       />
     </CartContext.Provider>
   );

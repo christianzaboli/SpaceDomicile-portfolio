@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-export default function Toast({ message, show, onClose, setDrawerOpen }) {
+import useDrawer from "../../hooks/useDrawer";
+
+export default function Toast({ message, show, onClose }) {
+  const { openDrawer } = useDrawer();
+
   useEffect(() => {
     if (show) {
       const timer = setTimeout(() => {
@@ -10,7 +14,7 @@ export default function Toast({ message, show, onClose, setDrawerOpen }) {
   }, [show, onClose]);
 
   const openandclose = () => {
-    setDrawerOpen(true);
+    openDrawer();
     onClose();
   };
   if (!show) return null;
