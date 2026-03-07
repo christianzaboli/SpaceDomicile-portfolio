@@ -1,4 +1,3 @@
-import "./CartItem.css";
 import { AnimatePresence } from "framer-motion";
 import DeleteCartOverlay from "./deleteCartOverlay";
 import { useState } from "react";
@@ -81,3 +80,4 @@ export default function CartItem({ item, onQtyChange }) {
     </>
   );
 }
+

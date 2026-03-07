@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import "./Toast.css";
-
 export default function Toast({ message, show, onClose, setDrawerOpen }) {
   useEffect(() => {
     if (show) {
@@ -29,3 +27,4 @@ export default function Toast({ message, show, onClose, setDrawerOpen }) {
     </div>
   );
 }
+

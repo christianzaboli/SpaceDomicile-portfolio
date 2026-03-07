@@ -1,45 +1,39 @@
-import "./MilkyWayPage.css";
 import { Link, useParams } from "react-router-dom";
-// import { useDefaultContext } from "../Contexts/DefaultContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { buildApiUrl, scrollToTop } from "../libs/utils";
+
 export default function MilkyWayPage() {
-  // const { planets, apiBaseUrl } = useDefaultContext();
+  // params e location
   const { galaxySlug } = useParams();
   const Location = useLocation();
   const currLocation = Location.pathname;
+
+  // sstates
   const [currGalaxy, setCurrGalaxy] = useState();
   const [currPlanets, setCurrPlanets] = useState();
   const navigate = useNavigate();
   // recupero i dati della galassia
   useEffect(() => {
-    fetch(`http://localhost:3000/api/galaxies/${galaxySlug}`)
-      .then((res) => res.json())
-      .then((data) => setCurrGalaxy(data), console.log(currGalaxy))
+    axios
+      .get(buildApiUrl(`/api/galaxies/${galaxySlug}`))
+      .then((response) => setCurrGalaxy(response.data), console.log(currGalaxy))
       .catch((err) => console.error("Errore nel caricamento galassia:", err));
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-    });
-  };
   // recupero i pianeti di questa galassia
   useEffect(() => {
-    fetch("http://localhost:3000/api/planets/from/" + galaxySlug)
-      .then((res) => {
-        if (!res.ok) {
-          if (res.status === 404) {
-            navigate("/coming-soon");
-            return null;
-          }
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data) setCurrPlanets(data);
+    axios
+      .get(buildApiUrl(`/api/planets/from/${galaxySlug}`))
+      .then((response) => {
+        setCurrPlanets(response.data);
       })
       .catch((err) => {
+        if (err.response?.status === 404) {
+          navigate("/coming-soon");
+          return;
+        }
         console.error("Errore nel caricamento pianeti", err);
       });
   }, [galaxySlug, navigate]);

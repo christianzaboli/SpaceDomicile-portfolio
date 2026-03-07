@@ -1,7 +1,5 @@
 import galaxyIcon from "/img/galaxy-icon.png";
 import { Link } from "react-router-dom";
-import "./Success.css";
-
 const Success = () => {
   return (
     <div className="galaxy-page thanks">
@@ -79,3 +77,4 @@ const Success = () => {
 };
 
 export default Success;
+

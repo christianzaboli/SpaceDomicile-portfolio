@@ -1,26 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { buildApiUrl, scrollToTop } from "../libs/utils";
 import galaxyIcon from "/img/galaxy-icon.png"; // <--- IMPORT AGGIUNTO
-import "./GalaxiesPage.css";
-
 export default function GalaxiesPage() {
   const [galaxies, setGalaxies] = useState([]);
 
-  const apiBaseUrl = "http://localhost:3000";
-
   useEffect(() => {
-    fetch(apiBaseUrl + "/api/galaxies")
-      .then((res) => res.json())
-      .then((data) => setGalaxies(data))
+    axios
+      .get(buildApiUrl("/api/galaxies"))
+      .then((response) => setGalaxies(response.data))
       .catch((err) => console.error("Errore nel caricamento galassie:", err));
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
   return (
     <div className="galaxy-page pos-gal">
       <div className="galaxies-section">

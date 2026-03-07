@@ -1,8 +1,9 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "../styles/Search.css";
+import axios from "axios";
 import { useDefaultContext } from "../Contexts/DefaultContext";
 import FilterDrawer from "../Components/MicroComponents/FilterDrawer";
+import { buildApiUrl, scrollToTop } from "../libs/utils";
 
 export default function SearchPage() {
   const { filters, setFilters, updateFilters, defaultFilter } =
@@ -43,14 +44,12 @@ export default function SearchPage() {
   // Converto l'oggetto filter in query string
   const queryString = new URLSearchParams(filters).toString();
 
-  const apiBaseUrl = "http://localhost:3000";
-
   const [planets, setPlanets] = useState([]);
 
   useEffect(() => {
-    fetch(`${apiBaseUrl}/api/planets/filter?${queryString}`)
-      .then((res) => res.json())
-      .then((data) => setPlanets(data))
+    axios
+      .get(`${buildApiUrl("/api/planets/filter")}?${queryString}`)
+      .then((response) => setPlanets(response.data))
       .catch((err) => console.error("Errore nel caricamento pianeti:", err));
   }, [filters]);
 
@@ -73,12 +72,7 @@ export default function SearchPage() {
 
   // crea la lista visibile
   const displayedPlanets = planets.slice(0, visibleCount);
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+
   return (
     <div className="galaxy-page pos">
       <h1 className="mw-subtitle-s">Cerca il tuo pianeta nell'universo</h1>

@@ -1,7 +1,5 @@
 import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
 import { useEffect, useRef } from 'react';
-import './Galaxy.css';
-
 const vertexShader = `
 attribute vec2 uv;
 attribute vec2 position;
@@ -331,3 +329,4 @@ export default function Galaxy({
 
     return <div ref={ctnDom} className="galaxy-container" {...rest} />;
 }
+

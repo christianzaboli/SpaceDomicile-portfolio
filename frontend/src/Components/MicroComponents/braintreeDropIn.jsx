@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import dropin from "braintree-web-drop-in";
+import axios from "axios";
+import { buildApiUrl } from "../../libs/utils";
 
-export default function BraintreeDropIn({ amount, invoiceId, onSuccess, onError }) {
+export default function BraintreeDropIn({
+  amount,
+  invoiceId,
+  onSuccess,
+  onError,
+}) {
   const instanceRef = useRef(null);
   const containerRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const [isPaying, setIsPaying] = useState(false); // 🔥 BLOCCA DOPPIO CLICK
+  const [isPaying, setIsPaying] = useState(false); //  BLOCCA DOPPIO CLICK
 
   useEffect(() => {
     let isCancelled = false;
@@ -17,12 +24,7 @@ export default function BraintreeDropIn({ amount, invoiceId, onSuccess, onError 
         if (!containerRef.current) return;
         containerRef.current.innerHTML = "";
 
-        const res = await fetch("http://localhost:3000/api/payment/token");
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || "Errore ottenendo il token di pagamento");
-        }
+        const { data } = await axios.get(buildApiUrl("/api/payment/token"));
 
         if (isCancelled) return;
 
@@ -51,13 +53,13 @@ export default function BraintreeDropIn({ amount, invoiceId, onSuccess, onError 
     return () => {
       isCancelled = true;
       if (instanceRef.current) {
-        instanceRef.current.teardown().catch(() => { });
+        instanceRef.current.teardown().catch(() => {});
       }
     };
   }, [amount, onError]);
 
   const handlePayment = async () => {
-    if (!instanceRef.current || isPaying) return; // ⛔ Se sta pagando → blocca
+    if (!instanceRef.current || isPaying) return; // Se sta pagando → blocca
     setIsPaying(true);
 
     if (!invoiceId) {
@@ -70,35 +72,38 @@ export default function BraintreeDropIn({ amount, invoiceId, onSuccess, onError 
       const payload = await instanceRef.current.requestPaymentMethod();
       const nonce = payload.nonce;
 
-      const method = payload.type === "PayPalAccount" ? "paypal" : "credit_card";
+      const method =
+        payload.type === "PayPalAccount" ? "paypal" : "credit_card";
 
-      const res = await fetch("http://localhost:3000/api/payment/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount,
-          nonce,
-          invoice_id: invoiceId,
-          method,
-        }),
+      const { data } = await axios.post(buildApiUrl("/api/payment/checkout"), {
+        amount,
+        nonce,
+        invoice_id: invoiceId,
+        method,
       });
 
-      const data = await res.json();
-
-      if (!res.ok || data.success === false) {
+      if (data.success === false) {
         const error = new Error(data.error || "Errore nel pagamento");
         error.details = data;
         console.error("Errore pagamento:", data);
         onError?.(error);
-        setIsPaying(false); // 🔥 Riabilita bottone solo se fallisce
+        setIsPaying(false); // Riabilita bottone solo se fallisce
         return;
       }
 
       onSuccess?.(data);
     } catch (err) {
-      console.error("Errore richiesta metodo di pagamento:", err);
-      onError?.(err);
-      setIsPaying(false); // 🔥 Riabilita bottone solo se fallisce
+      const errorData = err.response?.data;
+      if (errorData) {
+        const error = new Error(errorData.error || "Errore nel pagamento");
+        error.details = errorData;
+        console.error("Errore pagamento:", errorData);
+        onError?.(error);
+      } else {
+        console.error("Errore richiesta metodo di pagamento:", err);
+        onError?.(err);
+      }
+      setIsPaying(false); // Riabilita bottone solo se fallisce
     }
   };
 
@@ -108,7 +113,7 @@ export default function BraintreeDropIn({ amount, invoiceId, onSuccess, onError 
 
       <button
         className="checkout-btn"
-        disabled={loading || isPaying} // 🔥 BOTTONE bloccato mentre paga
+        disabled={loading || isPaying} // BOTTONE bloccato mentre paga
         onClick={handlePayment}
         style={{ marginTop: "15px" }}
       >

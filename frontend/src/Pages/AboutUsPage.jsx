@@ -1,15 +1,8 @@
-import "./AboutUsPage.css";
 import galaxyIcon from "/img/galaxy-icon.png";
 import { Link } from "react-router-dom";
 import GradientText from "../Components/ReactBits/GradientText";
-
+import { scrollToTop } from "../libs/utils";
 export default function AboutUsPage() {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
   return (
     <>
       <div className="galaxy-page pos">

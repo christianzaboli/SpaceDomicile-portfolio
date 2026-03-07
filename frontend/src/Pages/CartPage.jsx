@@ -1,4 +1,3 @@
-import "./CartPage.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useCart } from "../Contexts/CartContext";
@@ -8,6 +7,7 @@ import galaxyIcon from "/img/galaxy-icon.png";
 
 import CartItem from "../Components/MicroComponents/CartItem";
 import DeleteCartOverlay from "../Components/MicroComponents/deleteCartOverlay";
+import { scrollToTop } from "../libs/utils";
 
 export default function CarrelloPage() {
   const { items, onQtyChange, loading, clearCart } = useCart();
@@ -23,18 +23,13 @@ export default function CarrelloPage() {
   const itemsArray = Object.values(items);
   const total = itemsArray.reduce(
     (acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 0),
-    0
+    0,
   );
 
   const FREE_SHIPPING_THRESHOLD = 1500;
 
   if (loading) return <p>Caricamento carrello...</p>;
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+
   return (
     <div className="galaxy-page">
       <AnimatePresence>

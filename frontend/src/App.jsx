@@ -1,4 +1,3 @@
-import "./App.css";
 // DIPENDENZE REACT
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -71,3 +70,4 @@ function App() {
 }
 
 export default App;
+

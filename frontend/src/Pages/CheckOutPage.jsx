@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../Contexts/CartContext";
 import { useNavigate } from "react-router-dom";
-import "./Checkout.css";
 import BraintreeDropIn from "../Components/MicroComponents/braintreeDropIn";
 import axios from "axios";
+import { buildApiUrl, scrollToTop } from "../libs/utils";
 
 export default function CheckOutPage() {
   const { items, clearCart } = useCart();
@@ -138,7 +138,7 @@ export default function CheckOutPage() {
   // TOTALE
   const totale = Object.values(items).reduce(
     (a, item) => a + item.price * item.quantity,
-    0
+    0,
   );
   const shippingCost = totale >= 1500 ? 0 : 4.99;
   const totaleFinale = totale + shippingCost;
@@ -147,12 +147,9 @@ export default function CheckOutPage() {
   const updateStockAfterPurchase = async () => {
     try {
       for (const item of Object.values(items)) {
-        await axios.post(
-          `http://localhost:3000/api/stacks/${item.id}/purchase`,
-          {
-            quantity: item.quantity,
-          }
-        );
+        await axios.post(buildApiUrl(`/api/stacks/${item.id}/purchase`), {
+          quantity: item.quantity,
+        });
       }
       console.log("Stock aggiornato");
     } catch (error) {
@@ -178,27 +175,15 @@ export default function CheckOutPage() {
         quantity: item.quantity,
       }));
 
-      const res = await fetch("http://localhost:3000/api/create_order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          invoice_email: shipping.email,
-          shipping_address: shippingAddress,
-          invoice_address: billingAddress,
-          items: itemsArray,
-          wantInvoice: wantInvoice,
-          billing: wantInvoice ? billing : null,
-          shipping_cost: shippingCost,
-        }),
+      const { data } = await axios.post(buildApiUrl("/api/create_order"), {
+        invoice_email: shipping.email,
+        shipping_address: shippingAddress,
+        invoice_address: billingAddress,
+        items: itemsArray,
+        wantInvoice: wantInvoice,
+        billing: wantInvoice ? billing : null,
+        shipping_cost: shippingCost,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        console.error("Errore create_order:", data);
-        console.log("Errore creazione ordine");
-        return;
-      }
 
       setInvoiceId(data.invoice.id);
     } catch (err) {
@@ -221,11 +206,6 @@ export default function CheckOutPage() {
   const [isError, setIsError] = useState(true);
   useEffect(() => setIsError(false), []);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-    });
-  };
   return (
     <div className="galaxy-page">
       <div className="checkout-page">

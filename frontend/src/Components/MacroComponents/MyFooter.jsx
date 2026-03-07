@@ -1,4 +1,3 @@
-import "./MyFooter.css";
 export default function MyFooter() {
   return (
     <footer className="back-footer">

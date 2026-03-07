@@ -1,16 +1,18 @@
 import { createContext, useContext } from "react";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { API_BASE_URL, buildApiUrl } from "../libs/utils";
 
 export const DefaultContext = createContext();
 
 export function DefaultProvider({ children }) {
-  const apiBaseUrl = "http://localhost:3000";
+  const apiBaseUrl = API_BASE_URL;
   // caricamento pianeti
   const [planets, setPlanets] = useState([]);
   useEffect(() => {
-    fetch(apiBaseUrl + "/api/planets")
-      .then((res) => res.json())
-      .then((data) => setPlanets(data))
+    axios
+      .get(buildApiUrl("/api/planets"))
+      .then((response) => setPlanets(response.data))
       .catch((err) => console.error("Errore nel caricamento pianeti:", err));
   }, []);
 

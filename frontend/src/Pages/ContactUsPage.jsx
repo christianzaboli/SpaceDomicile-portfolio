@@ -1,14 +1,8 @@
-import "./ContactUsPage.css";
 import galaxyIcon from "/img/galaxy-icon.png";
 import { Link } from "react-router-dom";
+import { scrollToTop } from "../libs/utils";
 
 export default function ContactUs() {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
   return (
     <div className="galaxy-page pos contact">
       <h1>Contattaci</h1>

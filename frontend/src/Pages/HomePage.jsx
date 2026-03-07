@@ -14,6 +14,7 @@ import milkyWay from "/img/milky-way.png";
 import andromeda from "/img/andromeda.png";
 import sombrero from "/img/sombrero.png";
 import axios from "axios";
+import { buildApiUrl } from "../libs/utils";
 
 
 export default function HomePage() {
@@ -60,9 +61,9 @@ export default function HomePage() {
   const fetchPlanets = async () => {
     try {
       const [p1, p2, p3] = await Promise.all([
-        axios.get("http://localhost:3000/api/planets/mars"),
-        axios.get("http://localhost:3000/api/planets/jupiter"),
-        axios.get("http://localhost:3000/api/planets/saturn"),
+        axios.get(buildApiUrl("/api/planets/mars")),
+        axios.get(buildApiUrl("/api/planets/jupiter")),
+        axios.get(buildApiUrl("/api/planets/saturn")),
       ]);
 
 

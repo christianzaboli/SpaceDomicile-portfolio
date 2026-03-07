@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
-import "./NavBar.css";
 import galaxyIcon from "/img/galaxy-icon.png";
 import CartBadge from "./CartBadge";
 import { useState, useEffect } from "react";
+import { scrollToTop } from "../../libs/utils";
 
 export default function NavBar({ setDrawerOpen }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -14,12 +14,6 @@ export default function NavBar({ setDrawerOpen }) {
     }
   }, [mobileOpen]);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
   const clicknav = () => {
     setMobileOpen(false);
     scrollToTop();

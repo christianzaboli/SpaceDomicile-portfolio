@@ -1,6 +1,4 @@
 import { useCart } from "../../Contexts/CartContext";
-import "./CartBadge.css";
-
 export default function CartBadge() {
   const { items } = useCart();
 
@@ -20,3 +18,4 @@ export default function CartBadge() {
     </div>
   );
 }
+

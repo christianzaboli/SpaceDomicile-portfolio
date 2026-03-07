@@ -1,8 +1,7 @@
 import { useCart } from "../../Contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "./CartDrawer.css";
-
+import { scrollToTop } from "../../libs/utils";
 export default function CartDrawer({ open, onClose }) {
   const { items, onQtyChange } = useCart();
   const itemsArray = Object.values(items);
@@ -12,7 +11,7 @@ export default function CartDrawer({ open, onClose }) {
   // Calcola il totale
   const total = itemsArray.reduce(
     (acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 0),
-    0
+    0,
   );
 
   const handleDeleteClick = (itemId) => {
@@ -27,12 +26,7 @@ export default function CartDrawer({ open, onClose }) {
   const cancelDelete = () => {
     setDeleteConfirm(null);
   };
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+
   return (
     <>
       <div className={`cart-drawer ${open ? "open" : ""}`}>
