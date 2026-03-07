@@ -40,7 +40,7 @@ export default function MilkyWayPage() {
 
   return (
     <>
-      <div className="galaxy-page">
+      <div className="galaxy-page gpage">
         <div className="mw-wrapper">
           <div className="mw-header">
             <h1>{currGalaxy?.name}</h1>

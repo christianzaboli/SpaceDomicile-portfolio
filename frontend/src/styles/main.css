@@ -3586,6 +3586,9 @@ canvas {
       rgba(8, 0, 20, 0.75) 55%,
       rgba(2, 0, 5, 1) 100%
     );
+  &.gpage {
+    padding: 41px 20px 40px;
+  }
 }
 
 /* ========== RESPONSIVE ========== */

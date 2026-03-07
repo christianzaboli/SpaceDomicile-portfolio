@@ -1,7 +1,8 @@
-import galaxyIcon from "/img/galaxy-icon.png";
-import { Link } from "react-router-dom";
 import GradientText from "../Components/ReactBits/GradientText";
-import { scrollToTop } from "../libs/utils";
+import BackToHomeBtn from "../Components/MicroComponents/BackToHomeBtn";
+import TeamMemberCard from "../Components/MicroComponents/TeamMemberCard";
+import { TEAM_MEMBERS } from "../libs/consts";
+
 export default function AboutUsPage() {
   return (
     <>
@@ -15,146 +16,9 @@ export default function AboutUsPage() {
           </GradientText>
 
           <div className="team-grid">
-            {/* ALESSANDRO */}
-            <div>
-              <div className="team-card alessandro">
-                <div className="team-personal-links">
-                  <div className="team-overlay">
-                    <h3>Alessandro</h3>
-                  </div>
-                  <div className="socials-container">
-                    <Link to={"https://github.com/Aleiaco02"} target="_blank">
-                      <i className="fa-brands fa-github"></i>
-                    </Link>
-                    <Link to={"https://www.linkdn.com"} target="_blank">
-                      <i class="fa-brands fa-linkedin"></i>
-                    </Link>
-                    <Link to={"https://www.facebook.com"} target="_blank">
-                      <i class="fa-brands fa-facebook"></i>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* CHRISTIAN */}
-            <div>
-              <div className="team-card christian">
-                <div className="team-personal-links">
-                  <div className="team-overlay">
-                    <h3>Christian</h3>
-                  </div>
-                  <div className="socials-container">
-                    <Link
-                      to={"https://github.com/christianzaboli"}
-                      target="_blank"
-                    >
-                      <i className="fa-brands fa-github"></i>
-                    </Link>
-                    <Link
-                      to={
-                        "https://www.linkedin.com/in/christian-zaboli-vedovi-b1b1a7260"
-                      }
-                      target="_blank"
-                    >
-                      <i class="fa-brands fa-linkedin"></i>
-                    </Link>
-                    <Link
-                      to={"https://www.facebook.com/Osazeh"}
-                      target="_blank"
-                    >
-                      <i class="fa-brands fa-facebook"></i>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* CLAUDIA */}
-            <div>
-              <div className="team-card claudia">
-                <div className="team-personal-links">
-                  <div className="team-overlay">
-                    <h3>Claudia</h3>
-                  </div>
-                  <div className="socials-container">
-                    <Link
-                      to={"https://github.com/ClaudiaSgalippa"}
-                      target="_blank"
-                    >
-                      <i className="fa-brands fa-github"></i>
-                    </Link>
-                    <Link
-                      to={
-                        "https://www.linkedin.com/in/claudia-sgalippa-b966a7181/"
-                      }
-                      target="_blank"
-                    >
-                      <i class="fa-brands fa-linkedin"></i>
-                    </Link>
-                    <Link
-                      to={"https://www.facebook.com/claudia.sgalippa"}
-                      target="_blank"
-                    >
-                      <i class="fa-brands fa-facebook"></i>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* DANIEL */}
-            <div>
-              <div className="team-card daniel">
-                <div className="team-personal-links">
-                  <div className="team-overlay">
-                    <h3>Daniel</h3>
-                  </div>
-                  <div className="socials-container">
-                    <Link
-                      to={"https://github.com/Daniel-Di-Fraia"}
-                      target="_blank"
-                    >
-                      <i className="fa-brands fa-github"></i>
-                    </Link>
-                    <Link to={"https://www.linkdn.com"} target="_blank">
-                      <i class="fa-brands fa-linkedin"></i>
-                    </Link>
-                    <Link
-                      to={"https://www.facebook.com/daniel.difraia.1"}
-                      target="_blank"
-                    >
-                      <i class="fa-brands fa-facebook"></i>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* STEFANO */}
-            <div>
-              <div className="team-card stefano">
-                <div className="team-personal-links">
-                  <div className="team-overlay">
-                    <h3>Stefano</h3>
-                  </div>
-                  <div className="socials-container">
-                    <Link
-                      to={"https://github.com/StefanoSalaa98"}
-                      target="_blank"
-                    >
-                      <i className="fa-brands fa-github"></i>
-                    </Link>
-                    <Link to={"https://www.linkdn.com"} target="_blank">
-                      <i class="fa-brands fa-linkedin"></i>
-                    </Link>
-                    <Link to={"https://www.facebook.com"} target="_blank">
-                      <i class="fa-brands fa-facebook"></i>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {TEAM_MEMBERS.map((member) => (
+              <TeamMemberCard key={member.name} {...member} />
+            ))}
           </div>
 
           <h1>Chi Siamo</h1>
@@ -184,19 +48,7 @@ export default function AboutUsPage() {
             <li>Team giovane, creativo e full-stack ready</li>
           </ul>
 
-          <div className="gal-dim" onClick={scrollToTop}>
-            <Link to="/">
-              <img
-                src={galaxyIcon}
-                alt="Galassia"
-                className="galaxy-header-icon"
-              />
-            </Link>
-          </div>
-
-          <p className="go-back-text">
-            Premi la galassia e fai un salto nell’iperspazio fino alla Home
-          </p>
+          <BackToHomeBtn />
         </div>
       </div>
     </>
