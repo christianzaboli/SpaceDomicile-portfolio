@@ -296,7 +296,6 @@ main {
 
 @media (max-width: 768px) {
   .glass-card-2 {
-    width: 90%;
     max-width: 350px;
   }
 }
@@ -3697,7 +3696,7 @@ canvas {
 /* Mobile */
 @media (max-width: 480px) {
   .galaxy-page {
-    padding: 30px 15px;
+    padding: 120px 15px 40px;
   }
 
   .mw-header h1 {
