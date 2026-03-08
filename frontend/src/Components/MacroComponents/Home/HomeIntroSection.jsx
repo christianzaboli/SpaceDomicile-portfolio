@@ -7,7 +7,7 @@ export default function HomeIntroSection() {
       <BlurText
         text="Benvenuti in Space Domicile"
         delay={30}
-        animateBy=""
+        animateBy={window.innerWidth <= 768 ? 'words' : "letters" }
         direction="top"
         onAnimationComplete={() => {
           console.log("Animation completed!");

@@ -13,7 +13,7 @@ const buildKeyframes = (from, steps) => {
 
 const BlurText = ({
     text = '',
-    delay = 200,
+    delay = 400,
     className = '',
     animateBy = 'words',
     direction = 'top',
@@ -23,7 +23,7 @@ const BlurText = ({
     animationTo,
     easing = t => t,
     onAnimationComplete,
-    stepDuration = 0.30
+    stepDuration = 0.4
 }) => {
     const elements = animateBy === 'words' ? text.split(' ') : text.split('');
     const [inView, setInView] = useState(false);
