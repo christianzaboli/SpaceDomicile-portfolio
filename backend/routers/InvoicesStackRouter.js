@@ -1,5 +1,6 @@
 import {Router} from "express";
-import {index, show, store, update, modify, destroy} from "../controllers/invoicesStackController.js";
+import {index, show, store, update, modify, destroy} from "../controllers/InvoicesStackController.js";
+
 
 const router = Router();
 
