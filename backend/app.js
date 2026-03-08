@@ -19,6 +19,8 @@ import createOrderRouter from "./routers/createOrderRouter.js";
 import braintreeRouter from "./routers/braintreeRouter.js";
 import invoiceCreateRouter from "./routers/invoiceCreateRouter.js";
 
+const PORT = process.env.PORT || 3000;
+
 const app = express();
 
 // middleware imagepath
@@ -33,9 +35,13 @@ app.use(express.static("public"));
 // middleware cors
 app.use(
   cors({
-    origin: process.env.FE_APP,
+    origin: [process.env.CORS_ORIGIN_LOCAL, process.env.CORS_ORIGIN_PROD]
   })
 );
+
+app.get("/", (req, res) => {
+  res.send("SpaceDomicile API running 🚀");
+});
 
 app.get("/api", (req, res) => {
   res.send("Server ok!");
@@ -79,6 +85,6 @@ app.use("/api/create-invoice", invoiceCreateRouter);
 app.use(errorsHandler);
 app.use(notFound);
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
