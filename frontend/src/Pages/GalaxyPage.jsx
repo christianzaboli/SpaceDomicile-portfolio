@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { buildApiUrl, scrollToTop } from "../libs/utils";
 
-export default function MilkyWayPage() {
+export default function GalaxyPage() {
   // params e location
   const { galaxySlug } = useParams();
   const Location = useLocation();

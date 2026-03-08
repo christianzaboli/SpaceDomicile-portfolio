@@ -3,7 +3,7 @@ import axios from "axios";
 import { buildApiUrl } from "../libs/utils";
 import GalaxyCard from "../Components/Galaxy/GalaxyCard";
 import BackToHomeBtn from "../Components/MicroComponents/BackToHomeBtn";
-export default function GalaxiesPage() {
+export default function GalaxiesList() {
   const [galaxies, setGalaxies] = useState([]);
 
   useEffect(() => {

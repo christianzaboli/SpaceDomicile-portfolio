@@ -11,7 +11,6 @@ import useDrawer, { DrawerProvider } from "./hooks/useDrawer";
 
 // PAGINE
 import HomePage from "./Pages/HomePage";
-import MilkyWayPage from "./Pages/MilkyWayPage";
 import AboutUsPage from "./Pages/AboutUsPage";
 import ContactUs from "./Pages/ContactUsPage";
 import Planet from "./Pages/Planet";
@@ -19,7 +18,8 @@ import CartPage from "./Pages/CartPage";
 import SearchPage from "./Pages/SearchPage";
 import ComingSoon from "./Pages/ComingSoon";
 import CheckOutPage from "./Pages/CheckOutPage";
-import GalaxiesPage from "./Pages/GalaxiesPage";
+import GalaxiesList from "./Pages/GalaxiesList";
+import GalaxyPage from "./Pages/GalaxyPage";
 import NotFoundPage from "./Pages/NotFoundPage";
 import Success from "./Pages/Success";
 
@@ -38,8 +38,8 @@ function AppContent() {
               <Route element={<DefaultLayout />}>
                 <Route index element={<HomePage />} />
                 <Route path="galaxies">
-                  <Route index element={<GalaxiesPage />} />
-                  <Route path=":galaxySlug" element={<MilkyWayPage />} />
+                  <Route index element={<GalaxiesList />} />
+                  <Route path=":galaxySlug" element={<GalaxyPage />} />
                   <Route path=":galaxySlug/:planetSlug" element={<Planet />} />
                 </Route>
                 <Route path="/about-us" element={<AboutUsPage />} />

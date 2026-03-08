@@ -7,5 +7,6 @@ export function buildApiUrl(path = "") {
 export const scrollToTop = () => {
   window.scrollTo({
     top: 0,
+    behavior: "smooth"
   });
 };

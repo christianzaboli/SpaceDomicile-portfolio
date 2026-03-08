@@ -1,10 +1,12 @@
 /* Consolidated global stylesheet. Keep section order stable to reduce regressions. */
 
 /* Source: index.css */
-@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Edu+TAS+Beginner:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,700;1,700&display=swap");
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 * {
-  font-family: "Audiowide", sans-serif;
+  /* font-family: "Audiowide", sans-serif; */
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   font-style: normal;
   margin: 0;
@@ -2229,8 +2231,9 @@ canvas {
 }
 
 .about-container p {
-  font-size: 20px;
-  margin-bottom: 18px;
+  font-weight: 200;
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
   text-align: center;
 }
 
@@ -2239,12 +2242,13 @@ canvas {
   margin-bottom: 20px;
   text-align: center;
   list-style-type: none;
-  font-size: 18px;
-  line-height: 30px;
+  font-weight: 200;
+  font-size: 1.2rem;
 }
 
 .about-container ul li {
-  margin-bottom: 10px;
+  margin-bottom: 0.4rem;
+
 }
 
 .about-container a {
@@ -3328,7 +3332,7 @@ canvas {
   }
 }
 
-/* Source: Pages/MilkyWayPage.css */
+/* Source: Pages/GalaxyPage.css */
 /* WRAPPER GENERALE */
 .mw-wrapper {
   padding: 60px 0;
@@ -4761,6 +4765,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 
 .mw-card-search-s h3 {
+  font-weight: 500;
   position: relative;
   z-index: 3;
   text-align: center;
