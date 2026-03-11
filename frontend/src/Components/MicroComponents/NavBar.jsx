@@ -7,10 +7,10 @@ import useDrawer from "../../hooks/useDrawer.jsx";
 import { NAV_LINKS } from "../../libs/consts.jsx";
 
 
-function NavBrand() {
+function NavBrand({ onClick }) {
   return (
     <NavLink to="/">
-      <div className="rocket" onClick={scrollToTop}>
+      <div className="rocket" onClick={onClick}>
         <img
           src={galaxyIcon}
           alt="Galassia"
@@ -78,7 +78,7 @@ export default function NavBar() {
   return (
     <nav>
       <div className="nav-cont">
-        <NavBrand />
+        <NavBrand onClick={clicknav}/>
         <div className="nav-cont-right">
           <HamburgerButton
             onToggle={() => setMobileOpen(!mobileOpen)}
