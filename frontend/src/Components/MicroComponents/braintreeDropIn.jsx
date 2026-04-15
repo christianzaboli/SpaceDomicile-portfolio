@@ -28,6 +28,10 @@ export default function BraintreeDropIn({
 
         const { data } = await axios.get(buildApiUrl("/api/payment/token"));
 
+        if (data.success === false) {
+          throw new Error(data.error || "Errore generazione token pagamento");
+        }
+
         if (isCancelled) return;
 
         const instance = await dropin.create({

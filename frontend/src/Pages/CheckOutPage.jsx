@@ -15,7 +15,7 @@ export default function CheckOutPage() {
     wantInvoice,
     sameAsShipping,
     isCompany,
-    isError,
+    paymentError,
     shippingCost,
     totalFinal,
     handleShipping,
@@ -72,7 +72,7 @@ export default function CheckOutPage() {
           onPaymentError={handlePaymentError}
         />
 
-        {isError && <p className="payerror">Errore nel pagamento</p>}
+        {paymentError && <p className="payerror">{paymentError}</p>}
       </div>
     </div>
   );

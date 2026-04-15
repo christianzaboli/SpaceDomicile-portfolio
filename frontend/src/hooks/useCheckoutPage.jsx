@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../Contexts/CartContext.jsx";
@@ -21,8 +21,7 @@ export default function useCheckoutPage() {
   const [sameAsShipping, setSameAsShipping] = useState(false);
   const [isCompany, setIsCompany] = useState(false);
 
-  const [isError, setIsError] = useState(true);
-  useEffect(() => setIsError(false), []);
+  const [paymentError, setPaymentError] = useState("");
 
   // Update shipping field
   const handleShipping = (e) =>
@@ -145,6 +144,7 @@ export default function useCheckoutPage() {
 
     try {
       setCreatingInvoice(true);
+      setPaymentError("");
 
       const shippingAddress = `${shipping.indirizzo} ${shipping.civico}, ${shipping.città} ${shipping.CAP}, ${shipping.provincia}, ${shipping.paese}`;
 
@@ -178,6 +178,7 @@ export default function useCheckoutPage() {
 
   // Complete successful payment
   const handlePaymentSuccess = async () => {
+    setPaymentError("");
     await updateStockAfterPurchase();
     clearCart();
     navigate("/success");
@@ -191,7 +192,11 @@ export default function useCheckoutPage() {
   };
 
   // Toggle payment error state
-  const handlePaymentError = () => setIsError((prev) => !prev);
+  const handlePaymentError = (error) => {
+    const message =
+      error?.message || "Errore nel pagamento. Riprova tra qualche istante.";
+    setPaymentError(message);
+  };
   // Toggle company invoice mode
   const toggleCompany = () => setIsCompany((prev) => !prev);
 
@@ -205,7 +210,7 @@ export default function useCheckoutPage() {
     wantInvoice,
     sameAsShipping,
     isCompany,
-    isError,
+    paymentError,
     shippingCost,
     totalFinal,
     handleShipping,

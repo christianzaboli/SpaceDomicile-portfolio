@@ -107,6 +107,28 @@ SpaceDomiciles
 * Backend → Render
 * Database → TiDB Cloud
 
+### Payment mode
+
+Il progetto usa una variabile esplicita per scegliere il provider di pagamento.
+
+**Locale con Braintree Sandbox**
+```env
+PAYMENT_MODE=braintree
+BRAINTREE_ENV=sandbox
+BRAINTREE_MERCHANT_ID=...
+BRAINTREE_PUBLIC_KEY=...
+BRAINTREE_PRIVATE_KEY=...
+VITE_PAYMENT_MODE=braintree
+```
+
+**Produzione portfolio con mock payment**
+```env
+PAYMENT_MODE=mock
+VITE_PAYMENT_MODE=mock
+```
+
+`PAYMENT_MODE` guida il backend. `VITE_PAYMENT_MODE` deve essere allineata nel frontend per mostrare il percorso checkout corretto.
+
 ---
 
 
