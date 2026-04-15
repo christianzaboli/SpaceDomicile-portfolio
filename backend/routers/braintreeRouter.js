@@ -7,6 +7,7 @@ const router = express.Router();
 // --------------------------------------------------
 // GET /api/payment/token
 // --------------------------------------------------
+// Create client token
 router.get("/token", async (req, res) => {
   try {
     const { clientToken } = await gateway.clientToken.generate({});
@@ -21,6 +22,7 @@ router.get("/token", async (req, res) => {
 // POST /api/payment/checkout
 // Body: { amount, nonce, invoice_id, method? }
 // --------------------------------------------------
+// Process checkout payment
 router.post("/checkout", async (req, res) => {
   const { amount, nonce, invoice_id, method } = req.body;
 
@@ -33,7 +35,7 @@ router.post("/checkout", async (req, res) => {
 
   try {
     // ------------------------------------------------
-    // 1) Chiamata a Braintree
+    // Charge Braintree
     // ------------------------------------------------
     const sale = await gateway.transaction.sale({
       amount: amount.toString(),  
@@ -54,11 +56,11 @@ router.post("/checkout", async (req, res) => {
     }
 
     // ------------------------------------------------
-    // 2) Transazione OK → salvo pagamento nel DB
+    // Save payment in DB
     // ------------------------------------------------
     const transactionId = sale.transaction.id;
 
-    // Metodo di pagamento:
+    // Resolve payment method
     let paymentMethod = method || "credit_card";
 
     const instrument = sale.transaction.paymentInstrumentType;

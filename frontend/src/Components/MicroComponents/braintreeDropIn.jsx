@@ -12,11 +12,13 @@ export default function BraintreeDropIn({
   const instanceRef = useRef(null);
   const containerRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const [isPaying, setIsPaying] = useState(false); //  BLOCCA DOPPIO CLICK
+  const [isPaying, setIsPaying] = useState(false);
 
+  // Initialize Drop-In
   useEffect(() => {
     let isCancelled = false;
 
+    // Load Braintree widget
     async function init() {
       try {
         setLoading(true);
@@ -58,8 +60,9 @@ export default function BraintreeDropIn({
     };
   }, [amount, onError]);
 
+  // Submit payment
   const handlePayment = async () => {
-    if (!instanceRef.current || isPaying) return; // Se sta pagando → blocca
+    if (!instanceRef.current || isPaying) return;
     setIsPaying(true);
 
     if (!invoiceId) {
@@ -72,6 +75,7 @@ export default function BraintreeDropIn({
       const payload = await instanceRef.current.requestPaymentMethod();
       const nonce = payload.nonce;
 
+      // Detect payment method
       const method =
         payload.type === "PayPalAccount" ? "paypal" : "credit_card";
 
@@ -87,7 +91,7 @@ export default function BraintreeDropIn({
         error.details = data;
         console.error("Errore pagamento:", data);
         onError?.(error);
-        setIsPaying(false); // Riabilita bottone solo se fallisce
+        setIsPaying(false);
         return;
       }
 
@@ -103,7 +107,7 @@ export default function BraintreeDropIn({
         console.error("Errore richiesta metodo di pagamento:", err);
         onError?.(err);
       }
-      setIsPaying(false); // Riabilita bottone solo se fallisce
+      setIsPaying(false);
     }
   };
 

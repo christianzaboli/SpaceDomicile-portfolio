@@ -8,11 +8,13 @@ export default function usePlanetPageData(planetSlug, onNotFound) {
   const [relatedPlanets, setRelatedPlanets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Load planet data
   useEffect(() => {
     if (!planetSlug) return;
 
     let isActive = true;
 
+    // Fetch planet and stacks
     async function fetchPlanetAndStacks() {
       setIsLoading(true);
 
@@ -58,11 +60,13 @@ export default function usePlanetPageData(planetSlug, onNotFound) {
     };
   }, [planetSlug, onNotFound]);
 
+  // Load related planets
   useEffect(() => {
     if (!planet?.galaxy_slug) return;
 
     let isActive = true;
 
+    // Fetch nearby planets
     async function fetchRelatedPlanets() {
       try {
         const response = await axios.get(
@@ -85,6 +89,7 @@ export default function usePlanetPageData(planetSlug, onNotFound) {
     };
   }, [planet?.galaxy_slug, onNotFound]);
 
+  // Compute adjacent planets
   const { prevPlanet, nextPlanet } = useMemo(() => {
     if (!planet || relatedPlanets.length === 0) {
       return { prevPlanet: null, nextPlanet: null };

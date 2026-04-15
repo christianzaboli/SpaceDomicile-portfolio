@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 export default function useHomeBackground() {
   const [shouldUseGalaxy, setShouldUseGalaxy] = useState(true);
 
+  // Galaxy settings
   const galaxyConfig = useMemo(
     () => ({
       saturation: 0.8,
@@ -14,6 +15,7 @@ export default function useHomeBackground() {
     [],
   );
 
+  // Fallback background style
   const webglFallbackStyle = useMemo(
     () => ({
       position: "absolute",
@@ -32,6 +34,7 @@ export default function useHomeBackground() {
     [],
   );
 
+  // Detect WebGL support
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",

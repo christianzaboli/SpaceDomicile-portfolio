@@ -9,6 +9,7 @@ export default function CheckoutActions({
   onPaymentSuccess,
   onPaymentError,
 }) {
+  // Render checkout actions
   return (
     <div className="checkout-btn-row">
       <button className="back-to-cart-btn" onClick={onBackToCart}>

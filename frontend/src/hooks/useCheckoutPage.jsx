@@ -24,12 +24,15 @@ export default function useCheckoutPage() {
   const [isError, setIsError] = useState(true);
   useEffect(() => setIsError(false), []);
 
+  // Update shipping field
   const handleShipping = (e) =>
     setShipping((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+  // Update billing field
   const handleBilling = (e) =>
     setBilling((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+  // Toggle invoice option
   const handleToggleWantInvoice = (e) => {
     const value = e.target.checked;
     setWantInvoice(value);
@@ -40,6 +43,7 @@ export default function useCheckoutPage() {
     }
   };
 
+  // Copy shipping to billing
   const handleSameAsShipping = () => {
     const nextValue = !sameAsShipping;
     setSameAsShipping(nextValue);
@@ -61,6 +65,7 @@ export default function useCheckoutPage() {
     }
   };
 
+  // Validate checkout form
   const validateForm = () => {
     const newErrors = {};
 
@@ -120,6 +125,7 @@ export default function useCheckoutPage() {
   const shippingCost = total >= FREE_SHIPPING_THRESHOLD ? 0 : 4.99;
   const totalFinal = total + shippingCost;
 
+  // Decrease stock after purchase
   const updateStockAfterPurchase = async () => {
     try {
       for (const item of cartItems) {
@@ -133,6 +139,7 @@ export default function useCheckoutPage() {
     }
   };
 
+  // Create the order
   const handleCreateOrder = async () => {
     if (!validateForm()) return;
 
@@ -169,6 +176,7 @@ export default function useCheckoutPage() {
     }
   };
 
+  // Complete successful payment
   const handlePaymentSuccess = async () => {
     await updateStockAfterPurchase();
     clearCart();
@@ -176,12 +184,15 @@ export default function useCheckoutPage() {
     scrollToTop();
   };
 
+  // Return to cart
   const handleBackToCart = () => {
     navigate("/cart");
     scrollToTop();
   };
 
+  // Toggle payment error state
   const handlePaymentError = () => setIsError((prev) => !prev);
+  // Toggle company invoice mode
   const toggleCompany = () => setIsCompany((prev) => !prev);
 
   return {
