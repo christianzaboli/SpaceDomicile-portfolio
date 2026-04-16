@@ -4,7 +4,10 @@ import axios from "axios";
 import { useCart } from "../Contexts/CartContext.jsx";
 import { buildApiUrl, scrollToTop } from "../libs/utils.jsx";
 import { FREE_SHIPPING_THRESHOLD } from "../libs/consts.jsx";
-import { INITIAL_BILLING, INITIAL_SHIPPING } from "../Components/Checkout/checkoutConfig.js";
+import {
+  INITIAL_BILLING,
+  INITIAL_SHIPPING,
+} from "../Components/Checkout/checkoutConfig.js";
 
 export default function useCheckoutPage() {
   const { items, clearCart } = useCart();
@@ -78,8 +81,10 @@ export default function useCheckoutPage() {
 
     check("shipping_nome", shipping.nome);
     check("shipping_cognome", shipping.cognome);
-    if (!emailRegex.test(shipping.email)) newErrors.shipping_email = "Email non valida";
-    if (!phoneRegex.test(shipping.telefono)) newErrors.shipping_telefono = "Numero non valido";
+    if (!emailRegex.test(shipping.email))
+      newErrors.shipping_email = "Email non valida";
+    if (!phoneRegex.test(shipping.telefono))
+      newErrors.shipping_telefono = "Numero non valido";
     check("shipping_indirizzo", shipping.indirizzo);
     check("shipping_civico", shipping.civico);
     check("shipping_città", shipping.città);
@@ -91,8 +96,10 @@ export default function useCheckoutPage() {
       check("billing_nome", billing.nome);
       check("billing_cognome", billing.cognome);
 
-      if (!emailRegex.test(billing.email)) newErrors.billing_email = "Email non valida";
-      if (!phoneRegex.test(billing.telefono)) newErrors.billing_telefono = "Numero non valido";
+      if (!emailRegex.test(billing.email))
+        newErrors.billing_email = "Email non valida";
+      if (!phoneRegex.test(billing.telefono))
+        newErrors.billing_telefono = "Numero non valido";
 
       check("billing_indirizzo", billing.indirizzo);
       check("billing_civico", billing.civico);
@@ -120,7 +127,10 @@ export default function useCheckoutPage() {
   };
 
   const cartItems = Object.values(items);
-  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const total = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  );
   const shippingCost = total >= FREE_SHIPPING_THRESHOLD ? 0 : 4.99;
   const totalFinal = total + shippingCost;
 
@@ -177,11 +187,11 @@ export default function useCheckoutPage() {
   };
 
   // Complete successful payment
-  const handlePaymentSuccess = async () => {
+  const handlePaymentSuccess = async (id) => {
     setPaymentError("");
     await updateStockAfterPurchase();
     clearCart();
-    navigate("/success");
+    navigate(`/success`, { state: { transactionId: id } });
     scrollToTop();
   };
 

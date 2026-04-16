@@ -99,7 +99,7 @@ export default function BraintreeDropIn({
         return;
       }
 
-      onSuccess?.(data);
+      onSuccess?.(data?.transaction?.id);
     } catch (err) {
       const errorData = err.response?.data;
       if (errorData) {

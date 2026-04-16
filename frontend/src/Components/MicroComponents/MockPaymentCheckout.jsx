@@ -34,8 +34,7 @@ export default function MockPaymentCheckout({
         onError?.(error);
         return;
       }
-
-      onSuccess?.(data);
+      onSuccess(data?.transaction?.id);
     } catch (err) {
       const errorData = err.response?.data;
       if (errorData) {
@@ -55,7 +54,8 @@ export default function MockPaymentCheckout({
       <div className="checkout-panel" style={{ marginTop: "12px" }}>
         <h3>Demo payment environment</h3>
         <p style={{ opacity: 0.8, lineHeight: 1.5, marginBottom: "14px" }}>
-          Questa è una simulazione interna del pagamento per la versione pubblica portfolio.
+          Questa è una simulazione interna del pagamento per la versione
+          pubblica portfolio.
         </p>
 
         <div className="checkout-btn-row" style={{ paddingTop: 0 }}>
