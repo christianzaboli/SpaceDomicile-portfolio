@@ -17,8 +17,8 @@ export default function PlanetPackagesSection({ planet, stacks, onAddToCart }) {
             <PackageCard
               key={stack.id}
               {...stack}
-              planet_name={planet.name}
-              planet_image={planet.image}
+              planet_name={planet?.name}
+              planet_image={planet?.image}
               onAddToCart={onAddToCart}
             />
           ))}
