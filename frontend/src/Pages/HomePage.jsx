@@ -4,7 +4,7 @@ import HomeFeatureCards from "../Components/MacroComponents/Home/HomeFeatureCard
 import HomeGalaxySection from "../Components/MacroComponents/Home/HomeGalaxySection.jsx";
 import HomePopularPlanetsSection from "../Components/MacroComponents/Home/HomePopularPlanetsSection.jsx";
 import { useMemo, useRef, useEffect, useCallback, useState } from "react";
-import QueryState from "../components/app/QueryState.jsx";
+import QueryState from "../Components/app/QueryState.jsx";
 import { useAllPlanetsQuery } from "../hooks/queries/useCommerceQueries.js";
 import usePageMeta from "../hooks/app/usePageMeta.js";
 

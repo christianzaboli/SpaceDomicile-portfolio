@@ -1,6 +1,6 @@
 import GalaxyCard from "../Components/Galaxy/GalaxyCard.jsx";
 import BackToHomeBtn from "../Components/MicroComponents/BackToHomeBtn.jsx";
-import QueryState from "../components/app/QueryState.jsx";
+import QueryState from "../Components/app/QueryState.jsx";
 import { useGalaxiesQuery } from "../hooks/queries/useCommerceQueries.js";
 import usePageMeta from "../hooks/app/usePageMeta.js";
 
@@ -25,7 +25,9 @@ export default function GalaxiesList() {
           query={galaxiesQuery}
           loadingText="Caricamento galassie..."
           empty={
-            <p className="no-results-s">Al momento non ci sono galassie disponibili.</p>
+            <p className="no-results-s">
+              Al momento non ci sono galassie disponibili.
+            </p>
           }
         >
           <div className="galaxies-cards-container">

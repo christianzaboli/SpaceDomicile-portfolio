@@ -4,7 +4,7 @@ import { useCart } from "../Contexts/CartContext.jsx";
 import PlanetDetailsSection from "../Components/Planet/PlanetDetailsSection.jsx";
 import PlanetPackagesSection from "../Components/Planet/PlanetPackagesSection.jsx";
 import PlanetNearbySection from "../Components/Planet/PlanetNearbySection.jsx";
-import QueryState from "../components/app/QueryState.jsx";
+import QueryState from "../Components/app/QueryState.jsx";
 import {
   usePlanetDetailQuery,
   usePlanetStacksQuery,
@@ -21,7 +21,9 @@ export default function Planet() {
 
   const planetQuery = usePlanetDetailQuery(planetSlug);
   const stacksQuery = usePlanetStacksQuery(planetSlug);
-  const relatedPlanetsQuery = usePlanetsByGalaxyQuery(planetQuery.data?.galaxy_slug);
+  const relatedPlanetsQuery = usePlanetsByGalaxyQuery(
+    planetQuery.data?.galaxy_slug,
+  );
 
   usePageMeta(
     planetQuery.data?.name || "Dettagli pianeta",
@@ -42,7 +44,9 @@ export default function Planet() {
       return { prevPlanet: null, nextPlanet: null };
     }
 
-    const currentIndex = related.findIndex((entry) => entry.slug === planet.slug);
+    const currentIndex = related.findIndex(
+      (entry) => entry.slug === planet.slug,
+    );
 
     return {
       prevPlanet: currentIndex > 0 ? related[currentIndex - 1] : null,
@@ -64,11 +68,17 @@ export default function Planet() {
 
   return (
     <div className="planet-page">
-      <QueryState query={planetQuery} loadingText="Caricamento dettagli del pianeta...">
+      <QueryState
+        query={planetQuery}
+        loadingText="Caricamento dettagli del pianeta..."
+      >
         <PlanetDetailsSection planet={planetQuery.data} />
       </QueryState>
 
-      <QueryState query={stacksQuery} loadingText="Caricamento opzioni dei pacchetti...">
+      <QueryState
+        query={stacksQuery}
+        loadingText="Caricamento opzioni dei pacchetti..."
+      >
         <PlanetPackagesSection
           planet={planetQuery.data}
           stacks={stacksQuery.data}
@@ -80,4 +90,3 @@ export default function Planet() {
     </div>
   );
 }
-

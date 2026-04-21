@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
-import QueryState from "../components/app/QueryState.jsx";
+import QueryState from "../Components/app/QueryState.jsx";
 import {
   useGalaxyQuery,
   usePlanetsByGalaxyQuery,
@@ -65,7 +65,10 @@ export default function GalaxyPage() {
   return (
     <div className="galaxy-page gpage">
       <div className="mw-wrapper">
-        <QueryState query={galaxyQuery} loadingText="Caricamento dettagli della galassia...">
+        <QueryState
+          query={galaxyQuery}
+          loadingText="Caricamento dettagli della galassia..."
+        >
           <div className="mw-header catalog-header-panel">
             <p className="catalog-overline">Vetrina galattica</p>
             <h1>{galaxyQuery.data?.name}</h1>
@@ -84,7 +87,9 @@ export default function GalaxyPage() {
             query={planetsQuery}
             loadingText="Caricamento collezione pianeti..."
             empty={
-              <p className="no-results-s">Questa galassia sara disponibile presto.</p>
+              <p className="no-results-s">
+                Questa galassia sara disponibile presto.
+              </p>
             }
           >
             <div className="mw-cards-grid">

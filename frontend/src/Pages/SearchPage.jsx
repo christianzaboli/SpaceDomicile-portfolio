@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useMemo, useState } from "react";
 import FilterDrawer from "../Components/MicroComponents/FilterDrawer.jsx";
-import QueryState from "../components/app/QueryState.jsx";
+import QueryState from "../Components/app/QueryState.jsx";
 import { useFilteredPlanetsQuery } from "../hooks/queries/useCommerceQueries.js";
 import usePageMeta from "../hooks/app/usePageMeta.js";
 import {
