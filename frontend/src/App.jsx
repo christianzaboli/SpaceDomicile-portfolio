@@ -6,7 +6,7 @@ import { CartProvider } from "./Contexts/CartContext.jsx";
 import useDrawer, { DrawerProvider } from "./hooks/useDrawer.jsx";
 import CartDrawer from "./Components/MicroComponents/CartDrawer.jsx";
 import AppLoader from "./Components/MicroComponents/AppLoader.jsx";
-import ScrollToTop from "./components/app/ScrollToTop.jsx";
+import ScrollToTop from "./Components/app/ScrollToTop.jsx";
 
 const HomePage = lazy(() => import("./Pages/HomePage.jsx"));
 const AboutUsPage = lazy(() => import("./Pages/AboutUsPage.jsx"));
