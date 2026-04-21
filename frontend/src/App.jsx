@@ -6,7 +6,6 @@ import { CartProvider } from "./Contexts/CartContext.jsx";
 import useDrawer, { DrawerProvider } from "./hooks/useDrawer.jsx";
 import CartDrawer from "./Components/MicroComponents/CartDrawer.jsx";
 import AppLoader from "./Components/MicroComponents/AppLoader.jsx";
-import AppErrorBoundary from "./components/app/AppErrorBoundary.jsx";
 import ScrollToTop from "./components/app/ScrollToTop.jsx";
 
 const HomePage = lazy(() => import("./Pages/HomePage.jsx"));
@@ -30,29 +29,34 @@ function AppContent() {
       <DefaultProvider>
         <BrowserRouter>
           <ScrollToTop />
-          <AppErrorBoundary>
-            <Suspense fallback={<AppLoader text="Caricamento catalogo..." minHeight="55vh" />}>
-              <Routes>
-                <Route element={<DefaultLayout />}>
-                  <Route index element={<HomePage />} />
-                  <Route path="galaxies">
-                    <Route index element={<GalaxiesListPage />} />
-                    <Route path=":galaxySlug" element={<GalaxyPage />} />
-                    <Route path=":galaxySlug/:planetSlug" element={<PlanetPage />} />
-                  </Route>
-                  <Route path="/about-us" element={<AboutUsPage />} />
-                  <Route path="/contact-us" element={<ContactUsPage />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/search" element={<SearchPage />} />
-                  <Route path="/coming-soon" element={<ComingSoonPage />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
-                  <Route path="/success" element={<SuccessPage />} />
-                  <Route path="*" element={<NotFoundPage />} />
+          <Suspense
+            fallback={
+              <AppLoader text="Caricamento catalogo..." minHeight="55vh" />
+            }
+          >
+            <Routes>
+              <Route element={<DefaultLayout />}>
+                <Route index element={<HomePage />} />
+                <Route path="galaxies">
+                  <Route index element={<GalaxiesListPage />} />
+                  <Route path=":galaxySlug" element={<GalaxyPage />} />
+                  <Route
+                    path=":galaxySlug/:planetSlug"
+                    element={<PlanetPage />}
+                  />
                 </Route>
-              </Routes>
-            </Suspense>
-            <CartDrawer open={drawerOpen} onClose={closeDrawer} />
-          </AppErrorBoundary>
+                <Route path="/about-us" element={<AboutUsPage />} />
+                <Route path="/contact-us" element={<ContactUsPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/coming-soon" element={<ComingSoonPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/success" element={<SuccessPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Route>
+            </Routes>
+          </Suspense>
+          <CartDrawer open={drawerOpen} onClose={closeDrawer} />
         </BrowserRouter>
       </DefaultProvider>
     </CartProvider>
