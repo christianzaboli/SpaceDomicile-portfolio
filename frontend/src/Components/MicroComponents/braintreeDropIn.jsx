@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import dropin from "braintree-web-drop-in";
 import { fetchPaymentToken, submitPayment } from "../../api/commerce.js";
-import { trackEvent } from "../../lib/analytics.js";
+import { trackEvent } from "../../lib/eventBus.js";
 
 export default function BraintreeDropIn({ amount, invoiceId, onSuccess, onError }) {
   const instanceRef = useRef(null);

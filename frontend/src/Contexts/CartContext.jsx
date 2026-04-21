@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import Toast from "../Components/MicroComponents/Toast.jsx";
 import { reconcileCartLines } from "../api/commerce.js";
 import { buildCartSummary } from "../lib/cartSummary.js";
-import { trackEvent } from "../lib/analytics.js";
+import { trackEvent } from "../lib/eventBus.js";
 
 const CART_STORAGE_KEY = "cart";
 const SAVED_STORAGE_KEY = "saved-cart";

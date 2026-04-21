@@ -20,6 +20,7 @@ import braintreeRouter from "./routers/braintreeRouter.js";
 import invoiceCreateRouter from "./routers/invoiceCreateRouter.js";
 
 const PORT = process.env.PORT || 3000;
+const corsUrl = process.env.CORS_ORIGIN_LOCAL ?? process.env.CORS_ORIGIN_PROD;
 
 const app = express();
 // middleware imagepath
@@ -35,7 +36,7 @@ app.use(express.static("public"));
 // middleware cors
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: corsUrl,
   }),
 );
 

@@ -12,7 +12,7 @@ import { usePaymentConfigQuery } from "../hooks/queries/useCommerceQueries.js";
 import { normalizePaymentMode, PAYMENT_MODE } from "../libs/utils.jsx";
 import MockPaymentCheckout from "../Components/MicroComponents/MockPaymentCheckout.jsx";
 import BraintreeDropIn from "../Components/MicroComponents/braintreeDropIn.jsx";
-import { trackEvent } from "../lib/analytics.js";
+import { trackEvent } from "../lib/eventBus.js";
 import { isFeatureEnabled } from "../lib/featureFlags.js";
 
 const fieldLabels = {
@@ -212,7 +212,7 @@ function toBackendBilling(values) {
     indirizzo: values.billing_indirizzo,
     civico: values.billing_civico,
     citta: values.billing_citta,
-    "città": values.billing_citta,
+    città: values.billing_citta,
     CAP: values.billing_CAP,
     provincia: values.billing_provincia,
     paese: values.billing_paese,
@@ -295,7 +295,11 @@ function ReviewPanel({ values, cartLines, summary }) {
             </p>
             <p>{values.billing_email}</p>
             <p>{mapBillingAddress(values)}</p>
-            {values.isCompany && <p>{values.azienda} - P. IVA {values.piva}</p>}
+            {values.isCompany && (
+              <p>
+                {values.azienda} - P. IVA {values.piva}
+              </p>
+            )}
           </>
         ) : (
           <p>
@@ -541,17 +545,16 @@ export default function CheckOutPage() {
           onSelect={flow.goToStep}
         />
 
-        <form className="checkout-stage-shell" onSubmit={handleSubmit(() => {})}>
+        <form
+          className="checkout-stage-shell"
+          onSubmit={handleSubmit(() => {})}
+        >
           {flow.activeStep === "contact" && (
             <section className="checkout-panel checkout-stage-panel">
               <h3>Dettagli di contatto</h3>
               <div className="checkout-fields-grid">
                 <FormField register={register} errors={errors} name="nome" />
-                <FormField
-                  register={register}
-                  errors={errors}
-                  name="cognome"
-                />
+                <FormField register={register} errors={errors} name="cognome" />
                 <FormField
                   register={register}
                   errors={errors}
@@ -787,12 +790,12 @@ export default function CheckOutPage() {
                 <div className="checkout-total">
                   <strong>Totale:</strong> EUR {flow.summary.total.toFixed(2)}
                 </div>
-                {isFeatureEnabled("accountUpsell") && (
+                {/* {isFeatureEnabled("accountUpsell") && (
                   <p className="checkout-helper-copy">
                     Dopo l'acquisto potrai usare l'email di conferma per creare
                     un account e tracciare gli ordini futuri.
                   </p>
-                )}
+                )} */}
               </section>
             </section>
           )}

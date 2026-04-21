@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { submitPayment } from "../../api/commerce.js";
-import { trackEvent } from "../../lib/analytics.js";
+import { trackEvent } from "../../lib/eventBus.js";
 
 export default function MockPaymentCheckout({ amount, invoiceId, onSuccess, onError }) {
   const [isPaying, setIsPaying] = useState(false);
