@@ -10,17 +10,24 @@ export default function HomeDiscoveryCard({
   description,
   imageClassName = "",
 }) {
-  const classes = imageClassName ? `card-image ${imageClassName}` : "card-image";
+  const classes = imageClassName
+    ? `card-image ${imageClassName}`
+    : "card-image";
 
   return (
-    <div className="cards-container-2" onClick={scrollToTop}>
-      <Link to={to} className="glass-card-2">
-        <img src={imageSrc} alt={imageAlt} className={classes} />
+    <Link to={to} className="glass-card-2" onClick={scrollToTop}>
+      <div className="home-discovery-header">
         <GradientText className="card-title">
           <h2>{title}</h2>
         </GradientText>
+      </div>
+      <div className="home-discovery-visual-shell">
+        <img src={imageSrc} alt={imageAlt} className={classes} />
+      </div>
+
+      <div className="home-discovery-body">
         <p>{description}</p>
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 }

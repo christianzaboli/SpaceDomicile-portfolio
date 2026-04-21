@@ -22,10 +22,10 @@ import invoiceCreateRouter from "./routers/invoiceCreateRouter.js";
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-
 // middleware imagepath
 app.use(setImagePath);
 
+app.use(cors());
 // middleware bodyparser
 app.use(express.json());
 
@@ -35,8 +35,8 @@ app.use(express.static("public"));
 // middleware cors
 app.use(
   cors({
-    origin: [process.env.CORS_ORIGIN_LOCAL, process.env.CORS_ORIGIN_PROD]
-  })
+    origin: "http://localhost:5173",
+  }),
 );
 
 app.get("/", (req, res) => {
@@ -79,7 +79,6 @@ app.use("/api/payment", braintreeRouter);
 
 // router create-invoices
 app.use("/api/create-invoice", invoiceCreateRouter);
-
 
 // utilizzo middleware gestione errori
 app.use(errorsHandler);

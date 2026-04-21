@@ -1,131 +1,114 @@
-import { useDefaultContext } from "../../Contexts/DefaultContext.jsx";
-import { useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function FilterDrawer({ open, onClose }) {
-  const { filters, updateFiltersBatch, defaultFilter } = useDefaultContext();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  // Stato locale temporaneo
+export default function FilterDrawer({ open, onClose, filters, defaultFilter, onApply }) {
   const [localFilters, setLocalFilters] = useState(filters);
 
-  // Quando apri il drawer, copia i filtri attuali dentro localFilters
   useEffect(() => {
-    if (open) setLocalFilters(filters);
-  }, [open, filters]);
+    if (open) {
+      setLocalFilters(filters);
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [filters, open]);
 
   const handleChange = (key, value) => {
+    const numericKeys = ["price", "temperatureMin", "temperatureMax", "sizeMin", "sizeMax"];
+
     setLocalFilters((prev) => ({
       ...prev,
-      [key]: value,
+      [key]: numericKeys.includes(key) ? Number(value) : value,
     }));
   };
 
-  const handleSubmit = () => {
-    updateFiltersBatch(localFilters);
-
-    const params = new URLSearchParams();
-
-    Object.entries(localFilters).forEach(([key, value]) => {
-      if (value !== defaultFilter[key]) {
-        params.set(key, value);
-      }
-    });
-
-    setSearchParams(params);
-
-    onClose();
-  };
-  const resetFilters = () => {
-    updateFiltersBatch(defaultFilter);
-    setLocalFilters(defaultFilter);
-    setSearchParams({});
-    onClose();
-  };
   return (
     <>
-      {/* ✨ OVERLAY SEPARATO CON CLASSE OPEN ✨ */}
-      <div
-        className={`Fcart-drawer-overlay ${open ? "open" : ""}`}
-        onClick={onClose}
-      />
-
-      {/*  DRAWER  */}
-      <div className={`Fcart-drawer ${open ? "open" : ""}`}>
+      <div className={`Fcart-drawer-overlay ${open ? "open" : ""}`} onClick={onClose} />
+      <div className={`Fcart-drawer ${open ? "open" : ""}`} aria-hidden={!open}>
         <div className="Fcart-drawer-panel">
-          <button className="Fcart-drawer-close" onClick={onClose}>
-            &times;
+          <button className="Fcart-drawer-close" onClick={onClose} aria-label="Chiudi filtri">
+            x
           </button>
 
           <h3 className="Fcart-drawer-title">Filtri</h3>
 
           <div className="Ffilters-container">
-            {/* Ricerca */}
             <div className="Ffilter-block">
-              <label>Ricerca</label>
+              <label htmlFor="search-filter">Ricerca</label>
               <input
+                id="search-filter"
                 type="text"
                 value={localFilters.search}
-                onChange={(e) => handleChange("search", e.target.value)}
+                onChange={(event) => handleChange("search", event.target.value)}
                 placeholder="Cerca pianeti..."
               />
             </div>
 
-            {/* Prezzo max */}
             <div className="Ffilter-block">
-              <label>Prezzo massimo</label>
+              <label htmlFor="price-filter">Prezzo massimo</label>
               <input
+                id="price-filter"
                 type="number"
                 min="0"
                 max="5000"
                 value={localFilters.price}
-                onChange={(e) => handleChange("price", e.target.value)}
+                onChange={(event) => handleChange("price", event.target.value)}
               />
             </div>
 
-            {/* Temperatura */}
             <div className="Ffilter-block">
-              <label>Temperatura min</label>
+              <label htmlFor="temperature-min-filter">Temperatura minima</label>
               <input
+                id="temperature-min-filter"
                 type="number"
                 value={localFilters.temperatureMin}
-                onChange={(e) => handleChange("temperatureMin", e.target.value)}
+                onChange={(event) => handleChange("temperatureMin", event.target.value)}
               />
 
-              <label style={{ marginTop: "12px" }}>Temperatura max</label>
+              <label htmlFor="temperature-max-filter" style={{ marginTop: "12px" }}>
+                Temperatura massima
+              </label>
               <input
+                id="temperature-max-filter"
                 type="number"
                 value={localFilters.temperatureMax}
-                onChange={(e) => handleChange("temperatureMax", e.target.value)}
+                onChange={(event) => handleChange("temperatureMax", event.target.value)}
               />
             </div>
 
-            {/* Dimensione */}
             <div className="Ffilter-block">
-              <label>Dimensione min</label>
+              <label htmlFor="size-min-filter">Dimensione minima</label>
               <input
+                id="size-min-filter"
                 type="number"
                 value={localFilters.sizeMin}
-                onChange={(e) => handleChange("sizeMin", e.target.value)}
+                onChange={(event) => handleChange("sizeMin", event.target.value)}
               />
 
-              <label style={{ marginTop: "12px" }}>Dimensione max</label>
+              <label htmlFor="size-max-filter" style={{ marginTop: "12px" }}>
+                Dimensione massima
+              </label>
               <input
+                id="size-max-filter"
                 type="number"
                 value={localFilters.sizeMax}
-                onChange={(e) => handleChange("sizeMax", e.target.value)}
+                onChange={(event) => handleChange("sizeMax", event.target.value)}
               />
             </div>
 
-            {/* Galassia */}
             <div className="Ffilter-block">
-              <label>Galassia</label>
+              <label htmlFor="galaxy-filter">Galassia</label>
               <select
+                id="galaxy-filter"
                 value={localFilters.galaxy_slug || ""}
-                onChange={(e) => handleChange("galaxy_slug", e.target.value)}
+                onChange={(event) => handleChange("galaxy_slug", event.target.value)}
                 className="selectGalaxies"
               >
-                <option value="">Tutte</option>
+                <option value="">Tutte le galassie</option>
                 <option value="milky-way">Via Lattea</option>
                 <option value="andromeda">Andromeda</option>
                 <option value="sombrero">Sombrero</option>
@@ -133,17 +116,13 @@ export default function FilterDrawer({ open, onClose }) {
             </div>
           </div>
 
-          {/* ✨ BOTTONI FUORI DAL CONTAINER PER MANTENERLI FISSI ✨ */}
           <div className="Ffilter-actions">
-            <button
-              className="Fcart-drawer-btn reset-btn"
-              onClick={resetFilters}
-            >
-              Reset
+            <button className="Fcart-drawer-btn reset-btn" onClick={() => onApply(defaultFilter)}>
+              Reimposta
             </button>
 
-            <button className="Fcart-drawer-btn" onClick={handleSubmit}>
-              Applica
+            <button className="Fcart-drawer-btn" onClick={() => onApply(localFilters)}>
+              Applica filtri
             </button>
           </div>
         </div>
@@ -151,4 +130,3 @@ export default function FilterDrawer({ open, onClose }) {
     </>
   );
 }
-

@@ -1,3 +1,4 @@
+import { FREE_SHIPPING_THRESHOLD } from "../lib/commerceConfig.js";
 import milkyWay from "/img/milky-way.png";
 import andromeda from "/img/andromeda.png";
 import sombrero from "/img/sombrero.png";
@@ -69,7 +70,6 @@ export const TEAM_MEMBERS = [
   },
 ];
 
-export const FREE_SHIPPING_THRESHOLD = 1500;
 
 export const GALAXY_ITEMS = [
   {
@@ -118,3 +118,5 @@ export const FEATURE_ITEMS = [
     description: `Del tuo attestato con un minimo d'acquisto di ${FREE_SHIPPING_THRESHOLD} EUR`,
   },
 ];
+
+

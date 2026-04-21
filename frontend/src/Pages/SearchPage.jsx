@@ -1,148 +1,210 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { Suspense, useState, useEffect } from "react";
-import axios from "axios";
-import { useDefaultContext } from "../Contexts/DefaultContext.jsx";
+import { useMemo, useState } from "react";
 import FilterDrawer from "../Components/MicroComponents/FilterDrawer.jsx";
-import AppLoader from "../Components/MicroComponents/AppLoader.jsx";
-import SuspenseGate from "../Components/MicroComponents/SuspenseGate.jsx";
-import { buildApiUrl, scrollToTop } from "../libs/utils.jsx";
+import QueryState from "../components/app/QueryState.jsx";
+import { useFilteredPlanetsQuery } from "../hooks/queries/useCommerceQueries.js";
+import usePageMeta from "../hooks/app/usePageMeta.js";
+import {
+  DEFAULT_FILTERS,
+  buildFilterParams,
+  parseFilters,
+  sortPlanets,
+} from "../lib/catalogFilters.js";
 
-export default function SearchPage() {
-  const { filters, setFilters, updateFilters, defaultFilter } =
-    useDefaultContext();
+const FILTER_LABELS = {
+  search: "Ricerca",
+  price: "Prezzo max",
+  galaxy_slug: "Galassia",
+  temperatureMin: "Temperatura min",
+  temperatureMax: "Temperatura max",
+  sizeMin: "Dimensione min",
+  sizeMax: "Dimensione max",
+};
 
-  // gestione url condivisibile
-  const [searchParams, setSearchParams] = useSearchParams();
+function ActiveFilterChips({ filters, onRemove, onClear }) {
+  const activeEntries = Object.entries(filters).filter(
+    ([key, value]) =>
+      key !== "sort" && value !== DEFAULT_FILTERS[key] && value !== "",
+  );
 
-  // attiva i filtri dall'url
-  useEffect(() => {
-    const urlFilters = Object.fromEntries([...searchParams]);
-
-    // Converti numeri (URL li mette come stringhe)
-
-    const parsedFilters = {};
-    for (const key in urlFilters) {
-      const val = urlFilters[key];
-      parsedFilters[key] = isNaN(val) ? val : Number(val);
-    }
-
-    setFilters((prev) => ({ ...prev, ...parsedFilters }));
-  }, []);
-
-  // Ogni volta che i filtri cambiano → aggiorna l'URL
-  useEffect(() => {
-    const cleanFilters = {};
-
-    for (const key in filters) {
-      // evita di sporcare l'URL con valori identici ai default
-      if (filters[key] !== defaultFilter[key]) {
-        cleanFilters[key] = filters[key];
-      }
-    }
-
-    setSearchParams(cleanFilters);
-  }, [filters]);
-
-  // Converto l'oggetto filter in query string
-  const queryString = new URLSearchParams(filters).toString();
-
-  const [planets, setPlanets] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    axios
-      .get(`${buildApiUrl("/api/planets/filter")}?${queryString}`)
-      .then((response) => setPlanets(response.data))
-      .catch((err) => console.error("Errore nel caricamento pianeti:", err))
-      .finally(() => setIsLoading(false));
-  }, [filters]);
-
-  // gestione menù a tendina
-  const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add("no-scroll");
-    } else {
-      document.body.classList.remove("no-scroll");
-    }
-  }, [isOpen]);
-  // numero di card visibili a inizio pagina
-  const [visibleCount, setVisibleCount] = useState(8);
-
-  // reset quando cambiano i filtri
-  useEffect(() => {
-    setVisibleCount(8);
-  }, [filters]);
-
-  // crea la lista visibile
-  const displayedPlanets = planets.slice(0, visibleCount);
+  if (activeEntries.length === 0) {
+    return null;
+  }
 
   return (
-    <div className="galaxy-page pos">
-      <h1 className="mw-subtitle-s">Cerca il tuo pianeta nell'universo</h1>
+    <div className="search-chip-row">
+      {activeEntries.map(([key, value]) => (
+        <button key={key} className="search-chip" onClick={() => onRemove(key)}>
+          {FILTER_LABELS[key] || key}: {value} x
+        </button>
+      ))}
+      <button className="search-chip search-chip-clear" onClick={onClear}>
+        Cancella tutto
+      </button>
+    </div>
+  );
+}
 
-      {/* Sezione filtri */}
-      <div className="filter-dropdown-s">
+function SearchResultsSkeleton() {
+  return (
+    <div className="catalog-skeleton-grid">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <div className="catalog-skeleton-card" key={index} />
+      ))}
+    </div>
+  );
+}
+
+export default function SearchPage() {
+  usePageMeta(
+    "Ricerca pianeti",
+    "Filtra, confronta e scopri mondi in un catalogo pensato come una vera esperienza ecommerce.",
+  );
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isOpen, setIsOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(8);
+
+  const filters = useMemo(() => parseFilters(searchParams), [searchParams]);
+  const planetsQuery = useFilteredPlanetsQuery(filters);
+
+  const sortedPlanets = useMemo(
+    () => sortPlanets(planetsQuery.data ?? [], filters.sort),
+    [filters.sort, planetsQuery.data],
+  );
+
+  const displayedPlanets = sortedPlanets.slice(0, visibleCount);
+
+  const setFilters = (next) => {
+    setVisibleCount(8);
+    setSearchParams(buildFilterParams(next));
+  };
+
+  const updateFilter = (key, value) => {
+    setFilters({ ...filters, [key]: value });
+  };
+
+  const removeFilter = (key) => {
+    setFilters({ ...filters, [key]: DEFAULT_FILTERS[key] });
+  };
+
+  return (
+    <div className="galaxy-page pos catalog-page-shell">
+      <div className="catalog-header-panel search-page-header">
+        <p className="catalog-overline">Catalogo pianeti</p>
+        <h1 className="mw-subtitle-s">
+          Trova il pianeta giusto per il tuo prossimo regalo interstellare
+        </h1>
+        <p>
+          Confronta i mondi, restringi il catalogo e conserva URL condivisibili
+          per ogni ricerca.
+        </p>
+      </div>
+
+      <div className="catalog-toolbar">
         <div className="search-container-s">
           <button className="filter-btn-s" onClick={() => setIsOpen(true)}>
             Filtri
           </button>
-
-          <FilterDrawer
-            open={isOpen}
-            onClose={() => setIsOpen(false)}
-            filters={filters}
-            updateFilters={updateFilters}
-          />
+          <div className="catalog-results-meta">
+            <strong>{sortedPlanets.length}</strong>
+            <span>pianeti corrispondono ai tuoi filtri</span>
+          </div>
         </div>
+
+        <label className="catalog-sorter">
+          <span>Ordina per</span>
+          <select
+            value={filters.sort}
+            onChange={(event) => updateFilter("sort", event.target.value)}
+          >
+            <option value="featured">In evidenza</option>
+            <option value="name-asc">Nome A-Z</option>
+            <option value="name-desc">Nome Z-A</option>
+          </select>
+        </label>
       </div>
 
+      <ActiveFilterChips
+        filters={filters}
+        onRemove={removeFilter}
+        onClear={() => setFilters(DEFAULT_FILTERS)}
+      />
+
+      <FilterDrawer
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        filters={filters}
+        defaultFilter={DEFAULT_FILTERS}
+        onApply={(nextFilters) => setFilters(nextFilters)}
+      />
+
       <div className="mw-cards-grid-s">
-        <Suspense fallback={<AppLoader text="Caricamento pianeti..." minHeight="28vh" />}>
-          <SuspenseGate isLoading={isLoading}>
-            {displayedPlanets.length > 0 ? (
-              displayedPlanets.map((planet) => (
-                <Link
-                  to={`/galaxies/${planet.galaxy_slug}/${planet.slug}`}
-                  key={planet.id}
-                  className="mw-card-search-s"
-                  onClick={scrollToTop}
+        {planetsQuery.isLoading ? (
+          <SearchResultsSkeleton />
+        ) : (
+          <QueryState
+            query={planetsQuery}
+            empty={
+              <div className="catalog-empty-state">
+                <h2>Nessun pianeta corrisponde a questa ricerca.</h2>
+                <p>
+                  Prova ad ampliare i filtri di prezzo, temperatura o galassia
+                  per scoprire piu mondi.
+                </p>
+                <button
+                  className="checkout-btn"
+                  onClick={() => setFilters(DEFAULT_FILTERS)}
                 >
-                  <div>
-                    <div className="mw-explore-s">
-                      <h3>{planet.name}</h3>
-                    </div>
+                  Reimposta filtri
+                </button>
+              </div>
+            }
+          >
+            {displayedPlanets.map((planet) => (
+              <Link
+                to={`/galaxies/${planet.galaxy_slug}/${planet.slug}`}
+                key={planet.id}
+                className="mw-card-search-s"
+              >
+                <div className="mw-card-search-inner">
+                  <div className="mw-card-search-header">
+                    <h3>{planet.name}</h3>
+                  </div>
+                  <div className="mw-planet-visual-shell-s">
                     <div
                       className={`mw-planet-img-s mw-img-${planet.name
                         .toLowerCase()
                         .replace(/\s+/g, "-")}`}
                       style={{ backgroundImage: `url(${planet.image})` }}
                     ></div>
-                    <div className="mw-bottom-s">
+                  </div>
+                  <div className="card-infos">
+                    <div className="catalog-card-meta">
                       <p className="mw-desc-s">{planet.description}</p>
-                      <div className="mw-divider-s"></div>
-                      <div className="mw-explore-s">Esplora il pianeta →</div>
+                    </div>
+                    <div className="mw-bottom-s visible-bottom">
+                      <div className="catalog-card-trust-row">
+                        <span>{planet.galaxy_name || planet.galaxy_slug}</span>
+                        <span>Acquisto certificato</span>
+                        <span>Checkout sicuro</span>
+                        <span>Pronto da regalare</span>
+                      </div>
                     </div>
                   </div>
-                </Link>
-              ))
-            ) : (
-              <p className="no-results-s">
-                Nessun pianeta rispetta i parametri inseriti
-              </p>
-            )}
-          </SuspenseGate>
-        </Suspense>
+                </div>
+              </Link>
+            ))}
+          </QueryState>
+        )}
       </div>
 
-      {visibleCount < planets.length && (
+      {visibleCount < sortedPlanets.length && (
         <button
           className="buttonload-s"
-          onClick={() => setVisibleCount((v) => v + 8)}
+          onClick={() => setVisibleCount((count) => count + 8)}
         >
-          Carica altri
+          Carica altri pianeti
         </button>
       )}
     </div>

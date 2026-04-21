@@ -10,13 +10,19 @@ export default function GalaxyCard({ galaxy }) {
       onClick={scrollToTop}
     >
       <div className="galaxy-card">
-        <img
-          src={`/img/${galaxy.image}`}
-          alt={galaxy.name}
-          className="galaxy-card-image"
-        />
-        <div className="galaxy-card-title">{galaxy.name}</div>
-        <div className="galaxy-card-description">{galaxy.description}</div>
+        <div className="galaxy-card-header">
+          <div className="galaxy-card-title">{galaxy.name}</div>
+        </div>
+        <div className="galaxy-card-visual-shell">
+          <img
+            src={`/img/${galaxy.image}`}
+            alt={galaxy.name}
+            className="galaxy-card-image"
+          />
+        </div>
+        <div className="galaxy-card-body">
+          <p className="galaxy-card-description">{galaxy.description}</p>
+        </div>
       </div>
     </Link>
   );

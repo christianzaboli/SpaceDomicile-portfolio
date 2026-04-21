@@ -1,94 +1,104 @@
-import { Link, useParams } from "react-router-dom";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Suspense, useState, useEffect } from "react";
-import axios from "axios";
-import { buildApiUrl, scrollToTop } from "../libs/utils.jsx";
-import AppLoader from "../Components/MicroComponents/AppLoader.jsx";
-import SuspenseGate from "../Components/MicroComponents/SuspenseGate.jsx";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import QueryState from "../components/app/QueryState.jsx";
+import {
+  useGalaxyQuery,
+  usePlanetsByGalaxyQuery,
+} from "../hooks/queries/useCommerceQueries.js";
+import usePageMeta from "../hooks/app/usePageMeta.js";
+
+function PlanetCommerceCard({ planet, galaxySlug }) {
+  return (
+    <Link
+      to={`/galaxies/${galaxySlug}/${planet.slug}`}
+      className="mw-card-search-s galaxy-product-card"
+    >
+      <div className="mw-explore-s">
+        <h3>{planet.name}</h3>
+      </div>
+      <div
+        className={`mw-planet-img-s mw-img-${planet.name.toLowerCase().replace(/\s+/g, "-")}`}
+        style={{ backgroundImage: `url(${planet.image})` }}
+      />
+      <div id="catalog-card-meta">
+        <span>{planet.galaxy_name || "Mondo distintivo"}</span>
+        <span>Certificato premium incluso</span>
+      </div>
+      <div className="mw-bottom-s visible-bottom">
+        <p className="mw-desc-s">{planet.description}</p>
+        <div className="mw-divider-s"></div>
+        <div className="catalog-card-trust-row">
+          <span>Checkout sicuro</span>
+          <span>Pronto da regalare</span>
+        </div>
+        <div className="mw-explore-s">Vedi pianeta</div>
+      </div>
+    </Link>
+  );
+}
 
 export default function GalaxyPage() {
-  // params e location
   const { galaxySlug } = useParams();
-  const Location = useLocation();
-  const currLocation = Location.pathname;
-
-  // sstates
-  const [currGalaxy, setCurrGalaxy] = useState();
-  const [currPlanets, setCurrPlanets] = useState();
-  const [isLoadingGalaxy, setIsLoadingGalaxy] = useState(true);
-  const [isLoadingPlanets, setIsLoadingPlanets] = useState(true);
   const navigate = useNavigate();
-  // recupero i dati della galassia
+
+  const galaxyQuery = useGalaxyQuery(galaxySlug);
+  const planetsQuery = usePlanetsByGalaxyQuery(galaxySlug);
+
+  usePageMeta(
+    galaxyQuery.data?.name || "Collezione galattica",
+    "Esplora mondi e pacchetti presenti in questa collezione galattica.",
+  );
+
   useEffect(() => {
-    setIsLoadingGalaxy(true);
+    if (planetsQuery.isError && planetsQuery.error?.status === 404) {
+      navigate("/coming-soon");
+    }
+  }, [navigate, planetsQuery.error, planetsQuery.isError]);
 
-    axios
-      .get(buildApiUrl(`/api/galaxies/${galaxySlug}`))
-      .then((response) => setCurrGalaxy(response.data))
-      .catch((err) => console.error("Errore nel caricamento galassia:", err))
-      .finally(() => setIsLoadingGalaxy(false));
-  }, [galaxySlug]);
-
-  // recupero i pianeti di questa galassia
-  useEffect(() => {
-    setIsLoadingPlanets(true);
-
-    axios
-      .get(buildApiUrl(`/api/planets/from/${galaxySlug}`))
-      .then((response) => {
-        setCurrPlanets(response.data);
-      })
-      .catch((err) => {
-        if (err.response?.status === 404) {
-          navigate("/coming-soon");
-          return;
-        }
-        console.error("Errore nel caricamento pianeti", err);
-      })
-      .finally(() => {
-        setIsLoadingPlanets(false);
-      });
-  }, [galaxySlug, navigate]);
+  const counts = useMemo(() => {
+    const planets = planetsQuery.data ?? [];
+    return {
+      total: planets.length,
+    };
+  }, [planetsQuery.data]);
 
   return (
-    <>
-      <div className="galaxy-page gpage">
-        <div className="mw-wrapper">
-          <Suspense fallback={<AppLoader text="Caricamento galassia..." minHeight="32vh" />}>
-            <SuspenseGate isLoading={isLoadingGalaxy || isLoadingPlanets}>
-              <div className="mw-header">
-                <h1>{currGalaxy?.name}</h1>
-                <p>{currGalaxy?.description}</p>
-              </div>
-              <div>
-                <h2 className="mw-subtitle">I pianeti</h2>
-                <div className="mw-cards-grid">
-                  {currPlanets?.map((planet) => (
-                    <Link to={`${currLocation}/${planet.slug}`} key={planet.id}>
-                      <div className="mw-card" onClick={scrollToTop}>
-                        <div className="mw-explore">
-                          <h3>{planet.name}</h3>
-                        </div>
-                        <div
-                          className={`mw-planet-img mw-img-${planet.name
-                            .toLowerCase()
-                            .replace(/\s+/g, "-")}`}
-                          style={{ backgroundImage: `url(${planet.image})` }}
-                        ></div>
-                        <div className="mw-bottom">
-                          <p className="mw-desc">{planet.description}</p>
-                          <div className="mw-divider"></div>
-                          <div className="mw-explore">Esplora il pianeta →</div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </SuspenseGate>
-          </Suspense>
+    <div className="galaxy-page gpage">
+      <div className="mw-wrapper">
+        <QueryState query={galaxyQuery} loadingText="Caricamento dettagli della galassia...">
+          <div className="mw-header catalog-header-panel">
+            <p className="catalog-overline">Vetrina galattica</p>
+            <h1>{galaxyQuery.data?.name}</h1>
+            <p>{galaxyQuery.data?.description}</p>
+            <div className="catalog-header-stats">
+              <span>{counts.total} pianeti attualmente in catalogo</span>
+              <span>Certificati di proprieta pronti da regalare</span>
+              <span>Pagamento sicuro disponibile</span>
+            </div>
+          </div>
+        </QueryState>
+
+        <div>
+          <h2 className="mw-subtitle">Pianeti in questa collezione</h2>
+          <QueryState
+            query={planetsQuery}
+            loadingText="Caricamento collezione pianeti..."
+            empty={
+              <p className="no-results-s">Questa galassia sara disponibile presto.</p>
+            }
+          >
+            <div className="mw-cards-grid">
+              {planetsQuery.data?.map((planet) => (
+                <PlanetCommerceCard
+                  key={planet.id}
+                  planet={planet}
+                  galaxySlug={galaxySlug}
+                />
+              ))}
+            </div>
+          </QueryState>
         </div>
       </div>
-    </>
+    </div>
   );
 }

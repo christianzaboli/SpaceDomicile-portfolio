@@ -1,22 +1,16 @@
 import { NavLink } from "react-router-dom";
 import galaxyIcon from "/img/galaxy-icon.png";
 import CartBadge from "./CartBadge.jsx";
-import { useState, useEffect } from "react";
-import { scrollToTop } from "../../libs/utils.jsx";
+import { useEffect, useState } from "react";
 import useDrawer from "../../hooks/useDrawer.jsx";
 import { NAV_LINKS } from "../../libs/consts.jsx";
 
-
 function NavBrand({ onClick }) {
   return (
-    <NavLink to="/">
-      <div className="rocket" onClick={onClick}>
-        <img
-          src={galaxyIcon}
-          alt="Galassia"
-          className="galaxy-header-icon logo-dim"
-        />
-        <p>Space Domicile</p>
+    <NavLink to="/" onClick={onClick}>
+      <div className="rocket">
+        <img src={galaxyIcon} alt="Space Domiciles" className="galaxy-header-icon logo-dim" />
+        <p>Space Domiciles</p>
       </div>
     </NavLink>
   );
@@ -24,7 +18,7 @@ function NavBrand({ onClick }) {
 
 function HamburgerButton({ onToggle }) {
   return (
-    <button className="hamburger" onClick={onToggle}>
+    <button className="hamburger" onClick={onToggle} aria-label="Open navigation menu">
       <i className="fa-solid fa-bars" style={{ color: "#ffffff" }}></i>
     </button>
   );
@@ -50,45 +44,32 @@ function NavLinks({ mobileOpen, onClickNav }) {
   );
 }
 
-function CartButton({ onOpenCart }) {
-  return (
-    <button onClick={onOpenCart} className="cart">
-      <CartBadge />
-    </button>
-  );
-}
-
 export default function NavBar() {
   const { openDrawer } = useDrawer();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.classList.add("no-scroll");
-    } else {
-      document.body.classList.remove("no-scroll");
-    }
+    document.body.classList.toggle("no-scroll", mobileOpen);
+    return () => document.body.classList.remove("no-scroll");
   }, [mobileOpen]);
 
-  const clicknav = () => {
+  const closeMobile = () => {
     setMobileOpen(false);
-    scrollToTop();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <nav>
       <div className="nav-cont">
-        <NavBrand onClick={clicknav}/>
+        <NavBrand onClick={closeMobile} />
         <div className="nav-cont-right">
-          <HamburgerButton
-            onToggle={() => setMobileOpen(!mobileOpen)}
-          />
-          <NavLinks mobileOpen={mobileOpen} onClickNav={clicknav} />
-          <div
-            className={`menu-drawer-overlay ${mobileOpen ? "open" : ""}`}
-          ></div>
+          <HamburgerButton onToggle={() => setMobileOpen((current) => !current)} />
+          <NavLinks mobileOpen={mobileOpen} onClickNav={closeMobile} />
+          <div className={`menu-drawer-overlay ${mobileOpen ? "open" : ""}`}></div>
 
-          <CartButton onOpenCart={openDrawer} />
+          <button onClick={openDrawer} className="cart" aria-label="Open cart drawer">
+            <CartBadge />
+          </button>
         </div>
       </div>
     </nav>

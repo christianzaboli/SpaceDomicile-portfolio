@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 export default function DeleteCartOverlay({ open, onConfirm, onCancel, text }) {
   return (
     // animazione di uscita dall'overlay
-    <motion.div
+    <Motion.div
       className="overlayDelete"
       initial={{ opacity: 0 }}
       animate={{ opacity: open ? 1 : 0 }}
@@ -12,7 +12,7 @@ export default function DeleteCartOverlay({ open, onConfirm, onCancel, text }) {
       style={{ pointerEvents: open ? "auto" : "none" }}
     >
       {/* overlay stesso */}
-      <motion.div
+      <Motion.div
         className="motionDivDelete"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: open ? 1 : 0.8, opacity: open ? 1 : 0 }}
@@ -30,7 +30,8 @@ export default function DeleteCartOverlay({ open, onConfirm, onCancel, text }) {
             </button>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </Motion.div>
+    </Motion.div>
   );
 }
+

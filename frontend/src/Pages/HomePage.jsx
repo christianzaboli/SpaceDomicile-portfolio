@@ -3,19 +3,21 @@ import HomeIntroSection from "../Components/MacroComponents/Home/HomeIntroSectio
 import HomeFeatureCards from "../Components/MacroComponents/Home/HomeFeatureCards.jsx";
 import HomeGalaxySection from "../Components/MacroComponents/Home/HomeGalaxySection.jsx";
 import HomePopularPlanetsSection from "../Components/MacroComponents/Home/HomePopularPlanetsSection.jsx";
-import { useState, useEffect, useRef, useCallback } from "react";
-import axios from "axios";
-import { buildApiUrl } from "../libs/utils.jsx";
+import { useMemo, useRef, useEffect, useCallback, useState } from "react";
+import QueryState from "../components/app/QueryState.jsx";
+import { useAllPlanetsQuery } from "../hooks/queries/useCommerceQueries.js";
+import usePageMeta from "../hooks/app/usePageMeta.js";
+
+const FEATURED_SLUGS = ["mars", "jupiter", "saturn"];
 
 export default function HomePage() {
+  usePageMeta(
+    "Discover habitable worlds",
+    "Browse premium space property packages, curated galaxies, and gift-ready planet certificates.",
+  );
   const contentRef = useRef(null);
 
   const [containerHeight, setContainerHeight] = useState("100vh");
-  const [planet1, setPlanet1] = useState(null);
-  const [planet2, setPlanet2] = useState(null);
-  const [planet3, setPlanet3] = useState(null);
-  const [isLoadingPlanets, setIsLoadingPlanets] = useState(true);
-
   const updateHeight = useCallback(() => {
     if (!contentRef.current) return;
 
@@ -28,7 +30,6 @@ export default function HomePage() {
 
   useEffect(() => {
     updateHeight();
-
     const resizeObserver = new ResizeObserver(() => {
       updateHeight();
     });
@@ -45,48 +46,21 @@ export default function HomePage() {
     };
   }, [updateHeight]);
 
-  const fetchPlanets = useCallback(async () => {
-    setIsLoadingPlanets(true);
+  const planetsQuery = useAllPlanetsQuery();
 
-    try {
-      const [p1, p2, p3] = await Promise.all([
-        axios.get(buildApiUrl("/api/planets/mars")),
-        axios.get(buildApiUrl("/api/planets/jupiter")),
-        axios.get(buildApiUrl("/api/planets/saturn")),
-      ]);
-
-      setPlanet1(p1.data);
-      setPlanet2(p2.data);
-      setPlanet3(p3.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoadingPlanets(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchPlanets();
-  }, [fetchPlanets]);
-
-  useEffect(() => {
-    if (planet1 && planet2 && planet3) {
-      updateHeight();
-    }
-  }, [planet1, planet2, planet3, updateHeight]);
+  const featuredPlanets = useMemo(() => {
+    const planets = planetsQuery.data ?? [];
+    return FEATURED_SLUGS.map((slug) =>
+      planets.find((planet) => planet.slug === slug),
+    ).filter(Boolean);
+  }, [planetsQuery.data]);
 
   return (
     <div
-      className="container-jumbotrone"
-      style={{
-        width: "100%",
-        height: containerHeight,
-        minHeight: "100vh",
-        position: "relative",
-      }}
+      className="container-jumbotrone home-shell"
+      style={{ height: containerHeight }}
     >
       <HomeBackground />
-
       <div
         ref={contentRef}
         style={{
@@ -106,10 +80,15 @@ export default function HomePage() {
         <HomeIntroSection />
         <HomeFeatureCards />
         <HomeGalaxySection />
-        <HomePopularPlanetsSection
-          planets={[planet1, planet2, planet3]}
-          isLoading={isLoadingPlanets}
-        />
+        <QueryState
+          query={planetsQuery}
+          loadingText="Loading featured planets..."
+        >
+          <HomePopularPlanetsSection
+            planets={featuredPlanets}
+            isLoading={planetsQuery.isLoading}
+          />
+        </QueryState>
       </div>
     </div>
   );

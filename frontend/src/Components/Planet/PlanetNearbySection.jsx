@@ -30,8 +30,8 @@ export default function PlanetNearbySection({ prevPlanet, nextPlanet }) {
     <section className="planet-close">
       <h2 className="section-title">Pianeti vicini</h2>
       <div className="planet-close-container">
-        <NearbyPlanetCard label="Previous" planet={prevPlanet} />
-        <NearbyPlanetCard label="Next" planet={nextPlanet} />
+        <NearbyPlanetCard label="Precedente" planet={prevPlanet} />
+        <NearbyPlanetCard label="Successivo" planet={nextPlanet} />
       </div>
     </section>
   );

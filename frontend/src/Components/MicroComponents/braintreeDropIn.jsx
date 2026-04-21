@@ -1,24 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import dropin from "braintree-web-drop-in";
-import axios from "axios";
-import { buildApiUrl } from "../../libs/utils.jsx";
+import { fetchPaymentToken, submitPayment } from "../../api/commerce.js";
+import { trackEvent } from "../../lib/analytics.js";
 
-export default function BraintreeDropIn({
-  amount,
-  invoiceId,
-  onSuccess,
-  onError,
-}) {
+export default function BraintreeDropIn({ amount, invoiceId, onSuccess, onError }) {
   const instanceRef = useRef(null);
   const containerRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [isPaying, setIsPaying] = useState(false);
 
-  // Initialize Drop-In
   useEffect(() => {
     let isCancelled = false;
 
-    // Load Braintree widget
     async function init() {
       try {
         setLoading(true);
@@ -26,10 +19,9 @@ export default function BraintreeDropIn({
         if (!containerRef.current) return;
         containerRef.current.innerHTML = "";
 
-        const { data } = await axios.get(buildApiUrl("/api/payment/token"));
-
+        const data = await fetchPaymentToken();
         if (data.success === false) {
-          throw new Error(data.error || "Errore generazione token pagamento");
+          throw new Error(data.error || "Impossibile creare il token di pagamento");
         }
 
         if (isCancelled) return;
@@ -46,9 +38,8 @@ export default function BraintreeDropIn({
         });
 
         instanceRef.current = instance;
-      } catch (err) {
-        console.error("Errore creazione Drop-In:", err);
-        onError?.(err);
+      } catch (error) {
+        onError?.(error);
       } finally {
         if (!isCancelled) setLoading(false);
       }
@@ -64,13 +55,12 @@ export default function BraintreeDropIn({
     };
   }, [amount, onError]);
 
-  // Submit payment
   const handlePayment = async () => {
     if (!instanceRef.current || isPaying) return;
     setIsPaying(true);
 
     if (!invoiceId) {
-      onError?.(new Error("Invoice mancante: conferma prima l'ordine."));
+      onError?.(new Error("Ordine non ancora pronto per il pagamento."));
       setIsPaying(false);
       return;
     }
@@ -78,12 +68,11 @@ export default function BraintreeDropIn({
     try {
       const payload = await instanceRef.current.requestPaymentMethod();
       const nonce = payload.nonce;
+      const method = payload.type === "PayPalAccount" ? "paypal" : "credit_card";
 
-      // Detect payment method
-      const method =
-        payload.type === "PayPalAccount" ? "paypal" : "credit_card";
+      trackEvent("payment_attempt", { invoiceId, amount, method });
 
-      const { data } = await axios.post(buildApiUrl("/api/payment/checkout"), {
+      const data = await submitPayment({
         amount,
         nonce,
         invoice_id: invoiceId,
@@ -91,26 +80,16 @@ export default function BraintreeDropIn({
       });
 
       if (data.success === false) {
-        const error = new Error(data.error || "Errore nel pagamento");
+        const error = new Error(data.error || "Impossibile completare il pagamento");
         error.details = data;
-        console.error("Errore pagamento:", data);
         onError?.(error);
         setIsPaying(false);
         return;
       }
 
       onSuccess?.(data?.transaction?.id);
-    } catch (err) {
-      const errorData = err.response?.data;
-      if (errorData) {
-        const error = new Error(errorData.error || "Errore nel pagamento");
-        error.details = errorData;
-        console.error("Errore pagamento:", errorData);
-        onError?.(error);
-      } else {
-        console.error("Errore richiesta metodo di pagamento:", err);
-        onError?.(err);
-      }
+    } catch (error) {
+      onError?.(error);
       setIsPaying(false);
     }
   };
@@ -121,15 +100,15 @@ export default function BraintreeDropIn({
 
       <button
         className="checkout-btn"
-        disabled={loading || isPaying} // BOTTONE bloccato mentre paga
+        disabled={loading || isPaying}
         onClick={handlePayment}
         style={{ marginTop: "15px" }}
       >
         {loading
-          ? "Caricamento pagamento..."
+          ? "Caricamento opzioni di pagamento..."
           : isPaying
             ? "Elaborazione pagamento..."
-            : `Paga €${amount}`}
+            : `Paga EUR ${amount}`}
       </button>
     </div>
   );

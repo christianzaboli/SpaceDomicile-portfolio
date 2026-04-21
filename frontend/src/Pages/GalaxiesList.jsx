@@ -1,41 +1,39 @@
-import { Suspense, useEffect, useState } from "react";
-import axios from "axios";
-import { buildApiUrl } from "../libs/utils.jsx";
 import GalaxyCard from "../Components/Galaxy/GalaxyCard.jsx";
 import BackToHomeBtn from "../Components/MicroComponents/BackToHomeBtn.jsx";
-import AppLoader from "../Components/MicroComponents/AppLoader.jsx";
-import SuspenseGate from "../Components/MicroComponents/SuspenseGate.jsx";
+import QueryState from "../components/app/QueryState.jsx";
+import { useGalaxiesQuery } from "../hooks/queries/useCommerceQueries.js";
+import usePageMeta from "../hooks/app/usePageMeta.js";
+
 export default function GalaxiesList() {
-  const [galaxies, setGalaxies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  usePageMeta(
+    "Galassie",
+    "Esplora l'attuale catalogo Space Domiciles per galassia e scopri i mondi disponibili oggi.",
+  );
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    axios
-      .get(buildApiUrl("/api/galaxies"))
-      .then((response) => setGalaxies(response.data))
-      .catch((err) => console.error("Errore nel caricamento galassie:", err))
-      .finally(() => setIsLoading(false));
-  }, []);
+  const galaxiesQuery = useGalaxiesQuery();
 
   return (
     <div className="galaxy-page pos-gal">
       <div className="galaxies-section">
         <h2 className="galaxies-section-title">Galassie disponibili</h2>
         <p className="galaxies-section-desc">
-          Scopri stelle, pianeti e sistemi abitabili
+          Esplora sistemi selezionati, candidati abitabili e pacchetti premium
+          di proprieta.
         </p>
 
-        <Suspense fallback={<AppLoader text="Caricamento galassie..." minHeight="30vh" />}>
-          <SuspenseGate isLoading={isLoading}>
-            <div className="galaxies-cards-container">
-              {galaxies.map((galaxy) => (
-                <GalaxyCard key={galaxy.id} galaxy={galaxy} />
-              ))}
-            </div>
-          </SuspenseGate>
-        </Suspense>
+        <QueryState
+          query={galaxiesQuery}
+          loadingText="Caricamento galassie..."
+          empty={
+            <p className="no-results-s">Al momento non ci sono galassie disponibili.</p>
+          }
+        >
+          <div className="galaxies-cards-container">
+            {galaxiesQuery?.data?.map((galaxy) => (
+              <GalaxyCard key={galaxy.id} galaxy={galaxy} />
+            ))}
+          </div>
+        </QueryState>
 
         <BackToHomeBtn />
       </div>

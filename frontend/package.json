@@ -7,12 +7,16 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.0",
+    "@hookform/resolvers": "^5.2.2",
+    "@tanstack/react-query": "^5.99.2",
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
     "braintree-web-drop-in": "^1.46.0",
@@ -21,12 +25,16 @@
     "ogl": "^1.0.11",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-hook-form": "^7.72.1",
     "react-router-dom": "^7.9.6",
     "react-spinners": "^0.17.0",
-    "web-haptics": "^0.0.6"
+    "web-haptics": "^0.0.6",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.1.0",
@@ -34,6 +42,8 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
-    "vite": "^7.2.2"
+    "jsdom": "^29.0.2",
+    "vite": "^7.2.2",
+    "vitest": "^4.1.4"
   }
 }
