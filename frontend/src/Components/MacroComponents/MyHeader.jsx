@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import NavBar from "../MicroComponents/NavBar.jsx";
 
 const HEADER_OFFSET = 101;
-const REVEAL_ZONE = 250;
+const REVEAL_ZONE = 30;
 
 export default function MyHeader() {
   const [isVisible, setIsVisible] = useState(true);

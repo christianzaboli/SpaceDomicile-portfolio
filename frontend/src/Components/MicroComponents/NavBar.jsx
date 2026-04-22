@@ -9,7 +9,11 @@ function NavBrand({ onClick }) {
   return (
     <NavLink to="/" onClick={onClick}>
       <div className="rocket">
-        <img src={galaxyIcon} alt="Space Domiciles" className="galaxy-header-icon logo-dim" />
+        <img
+          src={galaxyIcon}
+          alt="Space Domiciles"
+          className="galaxy-header-icon logo-dim"
+        />
         <p>Space Domiciles</p>
       </div>
     </NavLink>
@@ -18,7 +22,11 @@ function NavBrand({ onClick }) {
 
 function HamburgerButton({ onToggle }) {
   return (
-    <button className="hamburger" onClick={onToggle} aria-label="Open navigation menu">
+    <button
+      className="hamburger"
+      onClick={onToggle}
+      aria-label="Open navigation menu"
+    >
       <i className="fa-solid fa-bars" style={{ color: "#ffffff" }}></i>
     </button>
   );
@@ -36,7 +44,7 @@ function NavLinks({ mobileOpen, onClickNav }) {
         >
           <span>
             {link.label}
-            <i className={link.iconClass}></i>
+            {/* <i className={link.iconClass}></i> */}
           </span>
         </NavLink>
       ))}
@@ -63,11 +71,19 @@ export default function NavBar() {
       <div className="nav-cont">
         <NavBrand onClick={closeMobile} />
         <div className="nav-cont-right">
-          <HamburgerButton onToggle={() => setMobileOpen((current) => !current)} />
+          <HamburgerButton
+            onToggle={() => setMobileOpen((current) => !current)}
+          />
           <NavLinks mobileOpen={mobileOpen} onClickNav={closeMobile} />
-          <div className={`menu-drawer-overlay ${mobileOpen ? "open" : ""}`}></div>
+          <div
+            className={`menu-drawer-overlay ${mobileOpen ? "open" : ""}`}
+          ></div>
 
-          <button onClick={openDrawer} className="cart" aria-label="Open cart drawer">
+          <button
+            onClick={openDrawer}
+            className="cart"
+            aria-label="Open cart drawer"
+          >
             <CartBadge />
           </button>
         </div>

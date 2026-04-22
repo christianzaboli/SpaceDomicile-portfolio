@@ -42,7 +42,9 @@ export default function CartPage() {
               setOpen(false);
             }}
             onCancel={() => setOpen(false)}
-            text={"Stai per svuotare completamente il carrello. Vuoi continuare?"}
+            text={
+              "Stai per svuotare completamente il carrello. Vuoi continuare?"
+            }
           />
         )}
       </AnimatePresence>
@@ -59,20 +61,30 @@ export default function CartPage() {
           </div>
 
           {isReconciling && (
-            <p className="cart-sync-banner">Aggiornamento disponibilita e prezzi in base all'ultimo catalogo...</p>
+            <p className="cart-sync-banner">
+              Aggiornamento disponibilita e prezzi in base all'ultimo
+              catalogo...
+            </p>
           )}
 
           {summary.invalidItems.length > 0 && (
             <div className="cart-alert-panel">
-              <strong>Attenzione:</strong> alcuni articoli nel carrello hanno cambiato disponibilita o prezzo e sono stati aggiornati.
+              <strong>Attenzione:</strong> alcuni articoli nel carrello hanno
+              cambiato disponibilita o prezzo e sono stati aggiornati.
             </div>
           )}
 
           {cartLines.length === 0 ? (
             <div className="catalog-empty-state">
               <h2>Il tuo carrello e vuoto.</h2>
-              <p>Esplora il catalogo e aggiungi un pacchetto pianeta per iniziare il checkout.</p>
-              <button className="checkout-btn" onClick={() => navigate("/search")}>
+              <p>
+                Esplora il catalogo e aggiungi un pacchetto pianeta per iniziare
+                il checkout.
+              </p>
+              <button
+                className="checkout-btn"
+                onClick={() => navigate("/search")}
+              >
                 Esplora pianeti
               </button>
             </div>
@@ -96,7 +108,10 @@ export default function CartPage() {
                     <strong>{item.name}</strong>
                     <p>su {item.planet_name}</p>
                   </div>
-                  <button className="back-to-cart-btn" onClick={() => moveSavedToCart(item.id)}>
+                  <button
+                    className="back-to-cart-btn"
+                    onClick={() => moveSavedToCart(item.id)}
+                  >
                     Sposta nel carrello
                   </button>
                 </div>
@@ -113,15 +128,19 @@ export default function CartPage() {
           </div>
           <div className="cart-summary-row">
             <span>Subtotale</span>
-            <strong>EUR {summary.subtotal.toFixed(2)}</strong>
+            <strong>€ {summary.subtotal.toFixed(2)}</strong>
           </div>
           <div className="cart-summary-row">
             <span>Spedizione</span>
-            <strong>{summary.shippingCost === 0 ? "Gratis" : `EUR ${summary.shippingCost.toFixed(2)}`}</strong>
+            <strong>
+              {summary.shippingCost === 0
+                ? "Gratis"
+                : `€ ${summary.shippingCost.toFixed(2)}`}
+            </strong>
           </div>
           <div className="cart-summary-total">
             <span>Totale</span>
-            <strong>EUR {summary.total.toFixed(2)}</strong>
+            <strong>€ {summary.total.toFixed(2)}</strong>
           </div>
 
           <div className="shipping-progress-card">
@@ -132,7 +151,10 @@ export default function CartPage() {
               />
             </div>
             {summary.freeShippingRemaining > 0 ? (
-              <p>Spendi ancora EUR {summary.freeShippingRemaining.toFixed(2)} per ottenere la spedizione gratuita.</p>
+              <p>
+                Spendi ancora € {summary.freeShippingRemaining.toFixed(2)} per
+                ottenere la spedizione gratuita.
+              </p>
             ) : (
               <p>Hai sbloccato la spedizione gratuita per questo ordine.</p>
             )}
@@ -147,7 +169,9 @@ export default function CartPage() {
           <button
             className="checkout-btn"
             onClick={() => navigate("/checkout")}
-            disabled={cartLines.length === 0 || summary.unavailableItems.length > 0}
+            disabled={
+              cartLines.length === 0 || summary.unavailableItems.length > 0
+            }
           >
             Procedi al checkout
           </button>
@@ -160,7 +184,10 @@ export default function CartPage() {
             Svuota carrello
           </button>
 
-          <p className="cart-policy-link">Politica di rimborso e dettagli di spedizione disponibili durante il checkout.</p>
+          <p className="cart-policy-link">
+            Politica di rimborso e dettagli di spedizione disponibili durante il
+            checkout.
+          </p>
         </aside>
       </div>
 
@@ -169,8 +196,10 @@ export default function CartPage() {
           <img src={galaxyIcon} alt="Galassia" className="galaxy-header-icon" />
         </Link>
       </div>
-      <p className="go-back-text">Hai bisogno di altra ispirazione? Torna alla home e continua a esplorare.</p>
+      <p className="go-back-text">
+        Hai bisogno di altra ispirazione? Torna alla home e continua a
+        esplorare.
+      </p>
     </div>
   );
 }
-

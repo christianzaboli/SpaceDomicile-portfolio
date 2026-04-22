@@ -303,7 +303,7 @@ function ReviewPanel({ values, cartLines, summary }) {
           </>
         ) : (
           <p>
-            Nessuna fattura richiesta. La fatturazione usera il contatto di
+            Nessuna fattura richiesta. La fatturazione userá il contatto di
             spedizione.
           </p>
         )}
@@ -530,7 +530,7 @@ export default function CheckOutPage() {
     <div className="galaxy-page">
       <div className="checkout-page checkout-page-upgrade">
         <div className="catalog-header-panel checkout-header-panel">
-          <p className="catalog-overline">Checkout sicuro</p>
+          {/* <p className="catalog-overline">Checkout sicuro</p> */}
           <h1>Completa il tuo ordine interstellare</h1>
           <p>
             Segui il checkout guidato per controllare contatti, spedizione,
@@ -728,7 +728,7 @@ export default function CheckOutPage() {
                 </div>
               ) : (
                 <p className="checkout-helper-copy">
-                  Nessuna fattura richiesta. La conferma ordine usera i tuoi
+                  Nessuna fattura richiesta. La conferma ordine userá i tuoi
                   dati di spedizione.
                 </p>
               )}
@@ -833,7 +833,7 @@ export default function CheckOutPage() {
           </div>
         )}
 
-        <section className="checkout-panel checkout-summary-footer-card">
+        {/* <section className="checkout-panel checkout-summary-footer-card">
           <h3>Perche questo checkout e piu sicuro</h3>
           <div className="cart-trust-list">
             <span>Dati di contatto e fatturazione convalidati</span>
@@ -844,7 +844,7 @@ export default function CheckOutPage() {
             Metodi accettati e modalita di pagamento vengono caricati
             dinamicamente dalla configurazione del catalogo.
           </p>
-        </section>
+        </section> */}
       </div>
     </div>
   );
