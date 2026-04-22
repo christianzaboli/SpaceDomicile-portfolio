@@ -1,42 +1,46 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavBar from "../MicroComponents/NavBar.jsx";
 
-export default function MyHeader() {
-  useEffect(() => {
-    let prevScrollPos = window.pageYOffset;
-    const navbar = document.getElementById("navbar");
+const HEADER_OFFSET = 101;
+const REVEAL_ZONE = 250;
 
-    if (!navbar) {
-      return undefined;
-    }
+export default function MyHeader() {
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
 
     const handleScroll = () => {
-      const isMobile = window.innerWidth <= 768;
-      const currentScrollPos = window.pageYOffset;
+      const currentScrollY = window.scrollY;
+      const isScrollingDown = currentScrollY > lastScrollY.current;
 
-      if (isMobile) {
-        navbar.style.top = "0";
-      } else if (prevScrollPos > currentScrollPos) {
-        navbar.style.top = "0";
-      } else {
-        navbar.style.top = "-101px";
+      setIsVisible(!isScrollingDown || currentScrollY === 0);
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    const handlePointerMove = (event) => {
+      if (event.clientY <= REVEAL_ZONE) {
+        setIsVisible(true);
       }
-
-      prevScrollPos = currentScrollPos;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
+    window.addEventListener("pointermove", handlePointerMove);
     handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("pointermove", handlePointerMove);
     };
   }, []);
 
   return (
-    <header className="back-header" id="navbar" style={{ top: "0px" }}>
+    <header
+      className="back-header"
+      style={{ top: isVisible ? "0px" : `-${HEADER_OFFSET}px` }}
+    >
       <NavBar />
     </header>
   );

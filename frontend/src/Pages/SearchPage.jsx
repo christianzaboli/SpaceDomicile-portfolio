@@ -208,7 +208,7 @@ export default function SearchPage() {
           className="buttonload-s"
           onClick={() => setVisibleCount((count) => count + 8)}
         >
-          Carica altri pianeti
+          Mostra altri pianeti
         </button>
       )}
     </div>

@@ -8,7 +8,7 @@ export default function DefaultLayout() {
       <main>
         <Outlet />
       </main>
-    <MyFooter />
+      <MyFooter />
     </>
   );
 }
