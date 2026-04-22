@@ -60,26 +60,32 @@ export default function PackageCard(props) {
               <i className="fas fa-check"></i> Cornice premium inclusa
             </li>
             <li>
-              <i className="fas fa-check"></i> Menzione del nome nel registro pubblico
+              <i className="fas fa-check"></i> Menzione del nome nel registro
+              pubblico
             </li>
           </>
         )}
       </ul>
 
-      <button
-        className={`add-to-cart-button ${isOutOfStock ? "disabled" : ""}`}
-        onClick={() => props.onAddToCart(props)}
-        disabled={isOutOfStock}
-      >
-        {isOutOfStock ? "Esaurito" : "Aggiungi al carrello"}
-      </button>
-
-      <div className="stock-info">
-        {isOutOfStock ? (
-          <span className="out-of-stock">Temporaneamente non disponibile</span>
-        ) : (
-          <span className="in-stock">Solo {props.stock} rimasti disponibili</span>
-        )}
+      <div className="package-card-buttons">
+        <button
+          className={`add-to-cart-button ${isOutOfStock ? "disabled" : ""}`}
+          onClick={() => props.onAddToCart(props)}
+          disabled={isOutOfStock}
+        >
+          {isOutOfStock ? "Esaurito" : "Aggiungi al carrello"}
+        </button>
+        <div className="stock-info">
+          {isOutOfStock ? (
+            <span className="out-of-stock">
+              Temporaneamente non disponibile
+            </span>
+          ) : (
+            <span className="in-stock">
+              Solo {props.stock} rimasti disponibili
+            </span>
+          )}
+        </div>
       </div>
     </article>
   );

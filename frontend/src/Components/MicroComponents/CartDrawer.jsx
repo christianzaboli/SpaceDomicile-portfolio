@@ -25,7 +25,12 @@ export default function CartDrawer({ open, onClose }) {
         <div className="mini-cart-summary-card">
           <div>
             <span>Subtotale </span>
-            <strong>{summary.subtotal.toFixed(2)} EUR</strong>
+            <strong>
+              <span className={summary.subtotal > 0 ? "subtotal-money" : ""}>
+                {summary.subtotal.toFixed(2)}
+              </span>{" "}
+              €
+            </strong>
           </div>
           <div>
             <span>Articoli: </span>
@@ -42,8 +47,8 @@ export default function CartDrawer({ open, onClose }) {
           </div>
           {summary.freeShippingRemaining > 0 ? (
             <p>
-              Mancano {summary.freeShippingRemaining.toFixed(2)} EUR alla
-              spedizione gratuita.
+              {summary.freeShippingRemaining.toFixed(2)} € alla spedizione
+              gratuita.
             </p>
           ) : (
             <p>Spedizione gratuita sbloccata.</p>
@@ -96,7 +101,7 @@ export default function CartDrawer({ open, onClose }) {
                   </button>
                 </div>
                 <div className="price-drawer">
-                  EUR {Number(item.price).toFixed(2)}
+                  € {Number(item.price).toFixed(2)}
                 </div>
 
                 <div className="cart-item-qty-controls">

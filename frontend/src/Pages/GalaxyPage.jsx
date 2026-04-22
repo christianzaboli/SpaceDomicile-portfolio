@@ -20,18 +20,9 @@ function PlanetCommerceCard({ planet, galaxySlug }) {
         className={`mw-planet-img-s mw-img-${planet.name.toLowerCase().replace(/\s+/g, "-")}`}
         style={{ backgroundImage: `url(${planet.image})` }}
       />
-      <div id="catalog-card-meta">
-        <span>{planet.galaxy_name || "Mondo distintivo"}</span>
-        <span>Certificato premium incluso</span>
-      </div>
       <div className="mw-bottom-s visible-bottom">
         <p className="mw-desc-s">{planet.description}</p>
         <div className="mw-divider-s"></div>
-        <div className="catalog-card-trust-row">
-          <span>Checkout sicuro</span>
-          <span>Pronto da regalare</span>
-        </div>
-        <div className="mw-explore-s">Vedi pianeta</div>
       </div>
     </Link>
   );

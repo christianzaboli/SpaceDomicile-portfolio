@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Toast from "../Components/MicroComponents/Toast.jsx";
 import { reconcileCartLines } from "../api/commerce.js";
 import { buildCartSummary } from "../lib/cartSummary.js";
@@ -86,11 +93,15 @@ export function CartProvider({ children }) {
 
         if (hasChanges) {
           setItems(nextMap);
-          showFeedback("Cart details were refreshed with the latest stock and pricing.");
+          showFeedback(
+            "I dettagli del carrello sono stati aggiornati con le ultime disponibilità e i prezzi.",
+          );
         }
       } catch {
         if (isMounted) {
-          showFeedback("We could not refresh cart availability right now.");
+          showFeedback(
+            "Al momento non è possibile aggiornare la disponibilità del carrello.",
+          );
         }
       } finally {
         if (isMounted) {
@@ -118,7 +129,8 @@ export function CartProvider({ children }) {
       }
       return copy;
     });
-    showFeedback("Item removed from cart.");
+
+    // showFeedback("Articolo rimosso dal carrello.");
   };
 
   const saveForLater = (id) => {
@@ -133,7 +145,7 @@ export function CartProvider({ children }) {
       delete next[id];
       return next;
     });
-    showFeedback("Item saved for later.");
+    showFeedback("Articolo salvato per dopo");
   };
 
   const moveSavedToCart = (id) => {
@@ -152,7 +164,7 @@ export function CartProvider({ children }) {
       delete next[id];
       return next;
     });
-    showFeedback("Saved item moved back to cart.");
+    showFeedback("L'articolo salvato è stato riportato nel carrello.");
   };
 
   const addToCart = (product) => {
@@ -163,7 +175,7 @@ export function CartProvider({ children }) {
       if (exists) {
         const newQuantity = exists.quantity + 1;
         if (newQuantity > stock) {
-          showFeedback(`Only ${stock} units are currently available.`);
+          showFeedback(`Al momento sono disponibili solo ${stock} unità.`);
           return current;
         }
 
@@ -173,7 +185,7 @@ export function CartProvider({ children }) {
           price: product.price,
           quantity: newQuantity,
         });
-        showFeedback(`${product.name} added to cart.`);
+        showFeedback(`${product.name} aggiunto al carrello`);
         return {
           ...current,
           [product.id]: { ...exists, quantity: newQuantity },
@@ -181,7 +193,7 @@ export function CartProvider({ children }) {
       }
 
       if (stock < 1) {
-        showFeedback(`${product.name} is currently unavailable.`);
+        showFeedback(`${product.name} non é disponibile al momento`);
         return current;
       }
 
@@ -191,7 +203,7 @@ export function CartProvider({ children }) {
         price: product.price,
         quantity: 1,
       });
-      showFeedback(`${product.name} added to cart.`);
+      showFeedback(`${product.name} aggiunto al carrello`);
       return {
         ...current,
         [product.id]: {
@@ -222,7 +234,9 @@ export function CartProvider({ children }) {
       }
 
       if (newQty > maxStock) {
-        showFeedback("You reached the maximum available quantity for this package.");
+        showFeedback(
+          "Hai raggiunto la quantità massima disponibile per questo pacchetto.",
+        );
       }
 
       copy[id] = {

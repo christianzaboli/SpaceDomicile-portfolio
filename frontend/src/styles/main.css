@@ -797,7 +797,6 @@ main {
   font-size: 2.6rem;
   color: #a097d7;
   position: absolute;
-  top: 12px;
   right: 20px;
   cursor: pointer;
   line-height: 1;
@@ -808,7 +807,9 @@ main {
     transform 0.15s,
     color 0.15s;
 }
-
+.subtotal-money {
+  color: white;
+}
 .cart-drawer-close:hover {
   color: #ff4757;
   transform: scale(1.05);
@@ -987,7 +988,7 @@ main {
 
 .cart-drawer-btn:hover {
   background: #a392fc;
-  transform: scale(1.05);
+  transform: scale(1.01);
   box-shadow: 0 5px 18px rgba(125, 92, 255, 0.38);
   transition: 0.5s ease;
 }
@@ -3473,7 +3474,6 @@ canvas {
 }
 
 .mw-header h1 {
-  padding-top: 80px;
   font-size: 48px;
   font-weight: 700;
   color: #c5b3ff;
@@ -3484,7 +3484,7 @@ canvas {
   font-size: 17px;
   max-width: 600px;
   margin: 10px auto 0;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 /* TITOLO PIANETI */
@@ -3597,7 +3597,9 @@ canvas {
 .mw-card:hover .mw-bottom {
   opacity: 1;
 }
-
+.package-card-buttons {
+  margin: auto 0 0;
+}
 .mw-desc {
   font-size: 15px;
   opacity: 0.9;
@@ -3900,7 +3902,7 @@ canvas {
 
 .planet-visual-container img {
   width: 100%;
-  animation: float 4s ease-in-out infinite;
+  /* animation: float 4s ease-in-out infinite; */
   filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.5));
 }
 
@@ -4176,6 +4178,9 @@ canvas {
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 7%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 
 @media (max-width: 1200px) {
@@ -4243,13 +4248,12 @@ canvas {
 
 .package-header {
   text-align: center;
-  margin-bottom: 20px;
 }
 
 .package-name {
   font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin: 15px 0 5px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -4563,10 +4567,11 @@ canvas {
   max-width: 1200px;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .filter-btn-s {
-  background: linear-gradient(135deg, #764ba2, #667eea);
+  background: #8366ea;
   color: white;
   padding: 12px 30px;
   font-size: 16px;
@@ -4581,8 +4586,8 @@ canvas {
 }
 
 .filter-btn-s:hover {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  transform: translateY(-2px);
+  /* background: linear-gradient(135deg, #667eea, #764ba2); */
+  transform: translateX(2px);
   box-shadow: 0 6px 20px rgba(118, 75, 162, 0.6);
 }
 
@@ -4879,11 +4884,17 @@ input[type="range"]::-webkit-slider-runnable-track {
   filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.38));
 }
 
-.mw-img-giove,
-.mw-img-saturno {
+.mw-planet-visual-shell-s .mw-img-giove,
+.mw-planet-visual-shell-s .mw-img-saturno {
   width: 128%;
   height: 290px !important;
   transform: translateY(100px) translateX(10px);
+}
+.galaxy-product-card .mw-img-giove,
+.galaxy-product-card .mw-img-saturno {
+  width: 128%;
+  height: 290px !important;
+  transform: translateY(75px) translateX(-22px);
 }
 
 .mw-img-urano {
@@ -4935,7 +4946,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   font-size: 1rem;
   line-height: 1.35;
   color: rgba(251, 246, 255, 0.92);
-  max-width: 20ch;
+  max-width: 24ch;
   text-wrap: balance;
 }
 
@@ -5065,7 +5076,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 
 .catalog-header-panel {
   max-width: 920px;
-  margin: 0 auto 32px;
+  margin: 30px auto 32px;
   padding: 28px;
   border-radius: 28px;
   background: linear-gradient(
@@ -5092,7 +5103,10 @@ input[type="range"]::-webkit-slider-runnable-track {
   flex-wrap: wrap;
   gap: 10px;
 }
-
+.catalog-header-stats {
+  justify-content: center;
+  margin-top: 18px;
+}
 .catalog-card-meta,
 .catalog-card-trust-row {
   display: flex;
@@ -5117,7 +5131,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   background: rgba(255, 255, 255, 0.09);
   border: 1px solid rgba(183, 157, 255, 0.08);
   color: #ece2ff;
-  font-size: 0.72rem;
+  font-size: 0.67rem;
   line-height: 1;
 }
 
@@ -5141,12 +5155,15 @@ input[type="range"]::-webkit-slider-runnable-track {
 .catalog-toolbar {
   margin: 0 auto 20px;
   max-width: 1200px;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row nowrap;
 }
 
 .catalog-results-meta {
   display: flex;
   align-items: baseline;
-  gap: 10px;
+  gap: 8px;
   color: #d9d7f3;
 }
 
@@ -5237,6 +5254,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 .galaxy-product-card,
 .mw-card-search-s {
   text-decoration: none;
+  min-height: 100%;
 }
 
 @media (max-width: 480px) {

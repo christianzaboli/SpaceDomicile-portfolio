@@ -9,12 +9,12 @@ export default function PlanetDetailsSection({ planet }) {
             alt={planet?.name}
             loading="eager"
           />
-          <div className="planet-visual-name">{planet?.name}</div>
-          <div className="product-trust-pills">
+          {/* <div className="planet-visual-name">{planet?.name}</div> */}
+          {/* <div className="product-trust-pills">
             <span>Checkout sicuro</span>
             <span>Certificato ufficiale</span>
             <span>Consegna pronta da regalare</span>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -56,15 +56,6 @@ export default function PlanetDetailsSection({ planet }) {
             </div>
           </div>
         </div>
-
-        {/* <div className="product-faq-panel">
-          <h3>Why buyers trust this listing</h3>
-          <ul>
-            <li>Every package includes a collectible ownership certificate.</li>
-            <li>Secure checkout supports card and PayPal flows.</li>
-            <li>Popular gift option with polished post-purchase confirmation.</li>
-          </ul>
-        </div> */}
       </div>
     </section>
   );

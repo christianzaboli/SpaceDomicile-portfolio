@@ -90,22 +90,26 @@ export default function SearchPage() {
 
   return (
     <div className="galaxy-page pos catalog-page-shell">
-      <div className="catalog-header-panel search-page-header">
+      <div className="mw-header catalog-header-panel search-page-header">
         <p className="catalog-overline">Catalogo pianeti</p>
-        <h1 className="mw-subtitle-s">
+        <h1>
           Trova il pianeta giusto per il tuo prossimo regalo interstellare
         </h1>
         <p>
           Confronta i mondi, restringi il catalogo e conserva URL condivisibili
           per ogni ricerca.
         </p>
+        <div className="catalog-header-stats">
+          <span>{sortedPlanets.length} pianeti trovati</span>
+          <span>Filtri condivisibili via URL</span>
+        </div>
       </div>
 
       <div className="catalog-toolbar">
+        <button className="filter-btn-s" onClick={() => setIsOpen(true)}>
+          Filtri
+        </button>
         <div className="search-container-s">
-          <button className="filter-btn-s" onClick={() => setIsOpen(true)}>
-            Filtri
-          </button>
           <div className="catalog-results-meta">
             <strong>{sortedPlanets.length}</strong>
             <span>pianeti corrispondono ai tuoi filtri</span>
