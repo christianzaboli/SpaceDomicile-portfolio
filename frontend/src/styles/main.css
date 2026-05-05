@@ -1,4 +1,11 @@
-/* Consolidated global stylesheet. Keep section order stable to reduce regressions. */
+/* Consolidated global stylesheet.
+   Section order:
+   1. Global foundation and shared home styles
+   2. Layout chrome
+   3. Reusable components
+   4. Page-specific sections
+   5. Storefront upgrade overrides
+*/
 
 /* Source: index.css */
 
@@ -61,124 +68,77 @@ main {
   background-color: black;
   width: 100%;
   position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+.home-shell {
+  display: flex;
+  align-items: stretch;
+}
+
+.home-shell > * {
+  min-width: 0;
 }
 
 .home-content-wrapper {
-  position: absolute;
-  inset: 0;
+  position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   pointer-events: none;
-  padding-top: 200px;
-}
-
-@media (max-width: 768px) {
-  .home-content-wrapper {
-    padding-top: 110px;
-  }
-}
-
-@media (max-width: 480px) {
-  .home-content-wrapper {
-    padding-top: 96px;
-  }
+  width: 100%;
+  padding-top: clamp(96px, 16vw, 200px);
+  padding-bottom: clamp(64px, 8vw, 96px);
 }
 
 .titolo-jumbotrone {
-  font-size: 60px;
+  font-size: clamp(1.65rem, 5vw, 3.75rem);
   line-height: 1.15;
   margin-top: 30px;
-  margin-bottom: 52px;
+  margin-bottom: clamp(24px, 4vw, 52px);
+  padding-inline: clamp(15px, 3vw, 30px);
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
   color: rgba(239, 239, 239, 0.8);
   text-align: center;
-  /* max-width: 15ch; */
   text-wrap: balance;
 }
 
-@media (max-width: 1024px) {
-  .titolo-jumbotrone {
-    font-size: 50px;
-    padding: 0 30px;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .titolo-jumbotrone {
-    font-size: 36px;
-    padding: 0 20px;
-    justify-content: center;
-    margin-bottom: 34px;
-    max-width: 15ch;
-  }
-}
-
-@media (max-width: 480px) {
-  .titolo-jumbotrone {
-    /* font-size: 29px; */
-    padding: 0 15px;
-    justify-content: center;
-    margin-bottom: 24px;
-  }
-}
-
 .descrizione-jumbotrone {
-  padding: 10px;
-  font-size: 20px;
-  line-height: 1.9;
+  padding: 10px clamp(15px, 3vw, 20px);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: clamp(1.55, 1.4vw, 1.9);
   text-align: center;
   display: inline-block;
   max-width: min(90vw, 36rem);
   text-wrap: pretty;
 }
 
-@media (max-width: 768px) {
-  .descrizione-jumbotrone {
-    font-size: 18px;
-    line-height: 1.7;
-    padding: 8px 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .descrizione-jumbotrone {
-    font-size: 16px;
-    line-height: 1.55;
-    padding: 6px 15px;
-  }
-}
-
 .cards-wrapper {
   display: flex;
-  gap: 32px;
+  gap: clamp(25px, 3vw, 32px);
   justify-content: center;
   margin-top: 82px;
-  padding: 0 30px;
-  flex-wrap: nowrap;
+  padding: 0 clamp(15px, 3vw, 30px);
+  flex-wrap: wrap;
+  width: min(100%, 1400px);
 }
 
 @media (max-width: 768px) {
   .cards-wrapper {
-    gap: 30px;
-    margin-top: 220px;
-    padding: 0 20px;
+    margin-top: 140px;
   }
-}
-
-@media (max-width: 480px) {
-  .cards-wrapper {
-    gap: 25px;
-    /* margin-top: 36px; */
-    padding: 0 15px;
+  .cart-badge-wrapper {
+    margin-left: 0;
   }
 }
 
 /* PRIME 4 CARD - CON RIDUZIONE GRADUALE */
 .glass-card {
-  width: min(100%, 320px);
+  flex: 1 1 280px;
+  width: 100%;
+  max-width: 320px;
   min-height: 300px;
   padding: 28px 24px;
   border-radius: 32px;
@@ -205,27 +165,8 @@ main {
   gap: 16px;
 }
 
-@media (max-width: 1400px) {
-  .glass-card {
-    padding: 28px 24px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .glass-card {
-    width: min(100%, 300px);
-  }
-}
-
-@media (max-width: 1024px) {
-  .glass-card {
-    width: min(100%, 280px);
-  }
-}
-
 @media (max-width: 768px) {
   .glass-card {
-    width: 90%;
     max-width: 350px;
   }
 }
@@ -239,23 +180,19 @@ main {
 }
 
 .glass-card p {
-  font-size: 0.98rem;
+  font-size: clamp(0.875rem, 1.3vw, 0.98rem);
   line-height: 1.45;
   color: rgba(251, 246, 255, 0.88);
   max-width: 22ch;
   text-wrap: balance;
 }
 
-@media (max-width: 480px) {
-  .glass-card p {
-    font-size: 14px;
-  }
-}
-
 /* CARD GALASSIE - CON RIDUZIONE GRADUALE */
 .glass-card-2 {
-  width: min(100%, 308px);
-  height: 500px;
+  flex: 1 1 286px;
+  width: 100%;
+  max-width: 308px;
+  /* height: 500px; */
   padding: 22px;
   border-radius: 32px;
   background:
@@ -283,30 +220,6 @@ main {
   gap: 18px;
 }
 
-@media (max-width: 1400px) {
-  .glass-card-2 {
-    width: min(100%, 308px);
-  }
-}
-
-@media (max-width: 1200px) {
-  .glass-card-2 {
-    width: min(100%, 296px);
-  }
-}
-
-@media (max-width: 1024px) {
-  .glass-card-2 {
-    width: min(100%, 286px);
-  }
-}
-
-@media (max-width: 768px) {
-  .glass-card-2 {
-    max-width: 350px;
-  }
-}
-
 .glass-card-2:hover {
   transform: translateY(-2px);
   border-color: rgba(171, 135, 255, 0.4);
@@ -316,137 +229,61 @@ main {
 }
 
 .glass-card-2 p {
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 1.4vw, 1rem);
   line-height: 1.35;
   color: rgba(251, 246, 255, 0.92);
   max-width: 22ch;
   text-wrap: balance;
 }
 
-@media (max-width: 480px) {
-  .glass-card-2 p {
-    font-size: 14px;
-  }
-}
-
 .card-image {
   width: 100%;
-  max-width: 250px;
-  height: 220px;
+  max-width: clamp(200px, 18vw, 250px);
+  height: clamp(180px, 16vw, 220px);
   object-fit: contain;
   filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.38));
 }
 
-@media (max-width: 1200px) {
-  .card-image {
-    max-width: 230px;
-  }
-}
-
-@media (max-width: 768px) {
-  .card-image {
-    max-width: 220px;
-    height: 200px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-image {
-    max-width: 200px;
-    height: 180px;
-  }
-}
-
 .card-image-sombrero {
-  max-width: 290px;
-  height: 250px;
-}
-
-@media (max-width: 1200px) {
-  .card-image-sombrero {
-    width: 270px;
-    height: 235px;
-  }
-}
-
-@media (max-width: 768px) {
-  .card-image-sombrero {
-    width: 260px;
-    height: 220px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-image-sombrero {
-    width: 230px;
-    height: 200px;
-  }
+  width: min(100%, clamp(230px, 21vw, 290px));
+  height: clamp(200px, 18vw, 250px);
 }
 
 .classe {
   color: rgba(239, 239, 239, 0.69);
-  margin-top: 92px;
+  margin-top: clamp(42px, 8vw, 92px);
+  padding-inline: clamp(15px, 3vw, 20px);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   text-align: center;
-}
-
-@media (max-width: 768px) {
-  .classe {
-    font-size: 32px;
-    padding: 0 20px;
-    margin-top: 60px;
-  }
-}
-
-@media (max-width: 480px) {
-  .classe {
-    font-size: 24px;
-    padding: 0 15px;
-    margin-top: 42px;
-  }
 }
 
 .container-galassie {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 32px;
+  gap: clamp(24px, 3vw, 32px);
   margin-bottom: 50px;
-  padding: 0 24px;
-}
-
-@media (max-width: 768px) {
-  .container-galassie {
-    gap: 24px;
-    padding: 0 18px;
-  }
+  padding: 0 clamp(15px, 3vw, 24px);
+  width: min(100%, 1400px);
 }
 
 .indietro-btn {
   margin-top: 100px;
-  padding: 12px 28px;
+  padding: clamp(10px, 1.5vw, 12px) clamp(22px, 3vw, 28px);
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: #ffffff;
-  font-size: 16px;
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
   cursor: pointer;
   transition: all 0.25s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 768px) {
-  .indietro-btn {
-    padding: 11px 24px;
-    font-size: 15px;
-  }
-}
-
 @media (max-width: 480px) {
   .indietro-btn {
-    padding: 10px 22px;
-    font-size: 14px;
     width: 90%;
     max-width: 250px;
     display: block;
@@ -465,47 +302,19 @@ main {
   display: flex;
   justify-content: center;
   margin-top: 150px;
-  font-size: 40px;
-}
-
-@media (max-width: 768px) {
-  .container-coming-soon h1 {
-    font-size: 36px;
-    padding: 0 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .container-coming-soon h1 {
-    font-size: 28px;
-    padding: 0 15px;
-  }
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  padding-inline: clamp(15px, 3vw, 20px);
 }
 
 .container-coming-soon p {
   display: flex;
   justify-content: center;
   margin-top: 80px;
-  font-size: 20px;
+  font-size: clamp(1rem, 2.3vw, 1.25rem);
   text-align: center;
-  line-height: 50px;
+  line-height: clamp(2rem, 4vw, 3.125rem);
   margin-bottom: 15px;
-}
-
-@media (max-width: 768px) {
-  .container-coming-soon p {
-    font-size: 18px;
-    line-height: 40px;
-    padding: 0 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .container-coming-soon p {
-    font-size: 16px;
-    line-height: 32px;
-    padding: 0 15px;
-  }
+  padding-inline: clamp(15px, 3vw, 20px);
 }
 
 .pianeta-piccolo {
@@ -526,19 +335,7 @@ main {
 
 .card-title {
   padding: 0;
-  font-size: 20px;
-}
-
-@media (max-width: 768px) {
-  .card-title {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-title {
-    font-size: 17px;
-  }
+  font-size: clamp(1.0625rem, 2vw, 1.25rem);
 }
 
 .icon {
@@ -592,14 +389,8 @@ main {
   display: flex;
   justify-content: center;
   margin-top: 10px !important;
-  font-size: 15px !important;
-}
-
-@media (max-width: 480px) {
-  .go-back-text {
-    font-size: 14px !important;
-    padding: 0 15px;
-  }
+  padding-inline: 15px;
+  font-size: clamp(0.875rem, 2vw, 0.9375rem) !important;
 }
 
 /* Source: Components/MacroComponents/MyFooter.css */
@@ -1721,13 +1512,13 @@ main {
 }
 
 /* Source: Components/MicroComponents/NavBar.css */
-* {
+nav a {
   text-decoration: none !important;
 }
 
 nav {
   width: 100%;
-  padding: 20px 40px;
+  padding: clamp(12px, 2vw, 20px) clamp(14px, 4vw, 40px);
   font-family: "Orbitron", sans-serif;
   color: white;
 }
@@ -1736,6 +1527,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
 }
 .hamburger {
   display: none;
@@ -1749,17 +1541,18 @@ nav {
 }
 .links {
   display: flex;
-  min-width: 90%;
-  flex-shrink: 1;
-  gap: 50px;
+  min-width: 0;
+  flex: 1 1 auto;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 32px);
 }
 
 /*logo*/
 .rocket {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 1.45rem;
+  gap: clamp(7px, 1vw, 12px);
+  font-size: clamp(1rem, 2vw, 1.45rem);
   font-weight: 700;
   letter-spacing: 1.5px;
   color: #ffffff;
@@ -1783,8 +1576,8 @@ nav {
 /*links */
 nav a span {
   position: relative;
-  padding: 10px 18px;
-  font-size: 1.15rem;
+  padding: clamp(6px, 1.4vw, 10px) clamp(8px, 1.8vw, 18px);
+  font-size: clamp(0.82rem, 1.25vw, 1.15rem);
   color: #ffffff;
   transition: 0.35s ease;
   border-radius: 14px;
@@ -1848,7 +1641,7 @@ nav a span::after {
 }
 
 .cart i {
-  font-size: 1.9rem;
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
   color: #ffffff;
   transition: 0.3s ease;
 }
@@ -1862,21 +1655,18 @@ nav a span::after {
 }
 
 .logo-dim {
-  height: 60px;
-  width: 60px !important;
+  height: clamp(40px, 4.5vw, 60px);
+  width: clamp(40px, 4.5vw, 60px) !important;
   margin: 0 !important;
 }
 .nav-cont-right {
   display: flex;
   flex-flow: nowrap row;
   align-items: center;
-}
-.nav-cont-right {
-  display: flex;
-  flex-flow: nowrap row;
-  align-items: center;
-  min-width: 66%;
-  justify-content: space-between;
+  min-width: 0;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  gap: 20px;
 }
 .menu-drawer-overlay {
   position: fixed;
@@ -1894,34 +1684,28 @@ nav a span::after {
   opacity: 1;
   pointer-events: auto;
 }
-@media (max-width: 1277px) {
-  .links {
-    gap: 0px;
-  }
-}
-/* ============================================ */
-/* MEDIA QUERIES - TABLET */
-/* ============================================ */
+
+/* Responsive navigation */
 
 @media (max-width: 1024px) {
   nav {
-    padding: 18px 30px;
+    padding: clamp(14px, 2vw, 18px) clamp(18px, 3vw, 30px);
   }
 
   .nav-cont {
-    flex-direction: row;
-    align-items: center;
     gap: 16px;
   }
+
   .hamburger {
     display: block;
   }
+
   .nav-cont-right {
-    display: flex;
-    flex-flow: nowrap row;
-    align-items: center;
     min-width: auto;
+    flex: 0 0 auto;
+    gap: 16px;
   }
+
   .links {
     position: fixed;
     top: 92px;
@@ -1941,120 +1725,29 @@ nav a span::after {
     z-index: 80;
     overflow-y: auto;
   }
+
   .links.open {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
     padding-bottom: 26px;
   }
-  nav a span {
-    font-size: 1.02rem;
-    padding: 8px 12px;
-  }
 
   .rocket {
-    font-size: 1.3rem;
-    gap: 10px;
     z-index: 8888;
     position: relative;
   }
-
-  .logo-dim {
-    height: 55px;
-    width: 55px !important;
-  }
-
-  .cart i {
-    font-size: 1.7rem;
-  }
 }
-
-@media (max-width: 900px) {
-  nav a span {
-    font-size: 0.88rem;
-    padding: 7px 10px;
-  }
-  .nav-cont-right {
-    justify-content: end;
-  }
-  .rocket {
-    font-size: 1.1rem;
-  }
-
-  .logo-dim {
-    height: 48px;
-    width: 48px !important;
-  }
-
-  .cart i {
-    font-size: 1.55rem;
-  }
-}
-
-@media (max-width: 750px) {
-  nav a span {
-    font-size: 0.82rem;
-    padding: 6px 8px;
-  }
-
-  .rocket {
-    font-size: 1rem;
-  }
-
-  .logo-dim {
-    height: 44px;
-    width: 44px !important;
-  }
-
-  .cart i {
-    font-size: 1.5rem;
-  }
-}
-
-/* ============================================ */
-/* MEDIA QUERIES - MOBILE */
-/* ============================================ */
 
 @media (max-width: 650px) {
-  nav {
-    padding: 14px 18px;
-  }
-
-  .nav-cont {
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-  }
-
   .nav-cont-right {
-    display: flex;
-    flex-flow: nowrap row;
-    align-items: center;
     min-width: auto;
-  }
-  nav a span {
-    font-size: 0.9rem;
-    padding: 7px 10px;
-  }
-
-  .rocket {
-    font-size: 1.1rem;
-    gap: 8px;
-  }
-
-  .logo-dim {
-    height: 45px;
-    width: 45px !important;
+    gap: 12px;
   }
 
   .cart {
-    /* position: absolute; */
     top: 18px;
     right: 18px;
-  }
-
-  .cart i {
-    font-size: 1.5rem;
   }
 
   .marg {
@@ -2074,23 +1767,9 @@ nav a span::after {
     padding: 12px 14px;
   }
 
-  nav a span {
-    font-size: 1.5rem;
-    padding: 6px 8px;
-  }
-
-  .rocket {
-    font-size: 1rem;
-    gap: 7px;
-  }
-
   .logo-dim {
     height: 40px;
     width: 40px !important;
-  }
-
-  .cart i {
-    font-size: 1.4rem;
   }
 
   .links {
@@ -2265,52 +1944,42 @@ canvas {
   cursor: default;
 }
 .about-container {
-  width: 85%;
+  width: min(100% - 32px, 1500px);
   margin: 0 auto;
 }
 
 /* TITOLI */
 .about-container h1 {
-  font-size: 60px;
+  font-size: clamp(2.8125rem, 5vw, 3.75rem);
   margin-block: 40px;
   color: #b56bff;
   text-align: center;
   letter-spacing: 2px;
 }
 
-@media (max-width: 650px) {
-  .about-container h1 {
-    font-size: 45px;
-  }
-}
-
 .about-container h2 {
-  font-size: 50px;
+  font-size: clamp(1.875rem, 4vw, 3.125rem);
   margin-block: 40px;
   color: #75eaff;
   text-align: center;
 }
 
-@media (max-width: 650px) {
-  .about-container h2 {
-    font-size: 30px;
-  }
-}
-
 .about-container p {
   font-weight: 200;
   font-size: 1.2rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.9rem;
   text-align: center;
+  line-height: 1.7;
 }
 
 .about-container ul {
-  margin-left: 20px;
+  margin-left: 0;
   margin-bottom: 20px;
   text-align: center;
   list-style-type: none;
   font-weight: 200;
   font-size: 1.2rem;
+  line-height: 1.7;
 }
 
 .about-container ul li {
@@ -2338,9 +2007,9 @@ canvas {
 .team-grid {
   margin-top: 30px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 260px);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 32px;
-  justify-content: center;
+  justify-items: center;
 }
 
 /* CARD CON SFONDO FOTO */
@@ -2401,10 +2070,11 @@ canvas {
   box-shadow: 0 0 26px rgba(117, 234, 255, 0.15);
   background-position: center 15%;
   background-size: 260px auto;
-  .socials-container {
-    opacity: 1;
-    gap: 3px;
-  }
+}
+
+.team-card:hover .socials-container {
+  opacity: 1;
+  gap: 3px;
 }
 
 .team-personal-links {
@@ -2447,16 +2117,10 @@ canvas {
 }
 
 .team-title-gradient {
-  font-size: 50px;
+  font-size: clamp(2rem, 4vw, 3.125rem);
   font-weight: 700;
   margin-block: 40px;
   text-align: center;
-}
-
-@media (max-width: 650px) {
-  .team-title-gradient {
-    font-size: 32px;
-  }
 }
 
 /* Source: Pages/CartPage.css */
@@ -3116,6 +2780,8 @@ canvas {
 /* Source: Pages/ContactUsPage.css */
 .contact {
   text-align: center;
+  /* width: min(100% - 32px, 860px); */
+  margin: 0 auto;
 }
 
 .contact h1 {
@@ -3132,7 +2798,7 @@ canvas {
 }
 
 .contact p {
-  font-size: 25px;
+  font-size: clamp(1.1rem, 2vw, 1.56rem);
   margin-bottom: 20px;
   line-height: 1.5;
 }
@@ -3150,18 +2816,21 @@ canvas {
 }
 
 .social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
   font-size: 40px;
   padding-bottom: 10px;
 }
 
 .social i {
-  margin-right: 20px;
+  margin-right: 0;
   color: #b56bff;
   cursor: pointer;
 }
 
 .social i:hover {
-  margin-right: 20px;
   color: #ffffff;
   transform: scale(1.03);
 }
@@ -3173,9 +2842,9 @@ canvas {
 
 /* Source: Pages/GalaxiesPage.css */
 .galaxies-section {
-  max-width: 1700px;
+  width: min(100% - 32px, 1700px);
   margin: 0 auto;
-  padding: 0 22px;
+  padding: 0 22px 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3204,20 +2873,20 @@ canvas {
 }
 
 .galaxies-cards-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
   gap: 32px;
   justify-content: center;
   align-items: stretch;
   width: 100%;
-  flex-wrap: wrap;
   padding: 0 24px;
 }
 
 .galaxy-card-link {
   text-decoration: none;
   display: block;
-  width: min(100%, 360px);
-  flex-shrink: 0;
+  width: 100%;
+  min-width: 0;
 }
 
 .galaxy-card {
@@ -3231,7 +2900,8 @@ canvas {
     0 18px 44px rgba(0, 0, 0, 0.34),
     0 0 28px rgba(85, 42, 177, 0.24);
   width: 100%;
-  height: 600px;
+  min-height: 600px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3350,9 +3020,6 @@ canvas {
   .galaxies-cards-container {
     gap: 45px;
   }
-  .galaxy-card-link {
-    width: min(100%, 340px);
-  }
   .galaxy-card {
     min-height: 570px;
   }
@@ -3370,13 +3037,8 @@ canvas {
 
 @media (max-width: 900px) {
   .galaxies-cards-container {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: minmax(280px, 500px);
     gap: 40px;
-  }
-  .galaxy-card-link {
-    width: 85%;
-    max-width: 500px;
   }
   .galaxy-card {
     min-height: 550px;
@@ -3389,7 +3051,8 @@ canvas {
 /* MOBILE */
 @media (max-width: 650px) {
   .galaxies-section {
-    padding: 0 18px;
+    width: min(100% - 20px, 100%);
+    padding: 0 10px 40px;
   }
   .galaxies-section-title {
     font-size: 2rem;
@@ -3402,10 +3065,8 @@ canvas {
   }
   .galaxies-cards-container {
     gap: 35px;
-    padding: 0 8px;
-  }
-  .galaxy-card-link {
-    width: 92%;
+    padding: 0;
+    grid-template-columns: minmax(0, 1fr);
   }
   .galaxy-card {
     min-height: 520px;
@@ -4323,7 +3984,11 @@ canvas {
   font-weight: 700;
   color: #ffffff;
 }
-
+@media (max-width: 768px) {
+  .cart-badge-wrapper {
+    margin-left: 0;
+  }
+}
 @media (max-width: 768px) {
   .price-amount {
     font-size: 2.5rem;
@@ -4487,7 +4152,11 @@ canvas {
   justify-content: center;
   flex-wrap: wrap;
 }
-
+@media (max-width: 1024px) {
+  nav a span {
+    font-size: clamp(1.5rem, 1.25vw, 1.15rem);
+  }
+}
 @media (max-width: 480px) {
   .addtocart-btn-group {
     flex-direction: column;
@@ -4581,8 +4250,8 @@ canvas {
 .filter-btn-s {
   background: #8366ea;
   color: white;
-  padding: 12px 30px;
-  font-size: 16px;
+  padding: clamp(10px, 1.5vw, 12px) clamp(20px, 3vw, 30px);
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
   font-weight: 600;
   border: none;
   border-radius: 25px;
@@ -4608,16 +4277,16 @@ canvas {
   text-align: center;
   margin-top: 50px;
   margin-bottom: 40px;
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   color: #e8d7ff;
 }
 
 /* ========== GRID CARDS ========== */
 .mw-cards-grid-s {
-  max-width: 1400px;
+  width: min(100%, 1400px);
   margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 308px));
   justify-content: center;
   gap: 35px;
   padding: 0 20px;
@@ -4640,10 +4309,12 @@ canvas {
 
 .searchbar {
   text-align: center;
-  margin-right: 50px;
+  width: min(100% - 32px, 1200px);
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 24px;
   padding-bottom: 100px;
 }
 
@@ -4654,8 +4325,9 @@ canvas {
 
 .searchbar .range {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 10%;
+  gap: 18px;
 }
 
 .searchbar .slider-container {
@@ -4666,11 +4338,11 @@ canvas {
 }
 
 .searchbar .big-bar {
-  width: 120%;
+  width: min(100%, 320px);
 }
 
 .searchbar .filter-element {
-  width: 25%;
+  width: min(100%, 280px);
 }
 
 .searchbar .reset {
@@ -4679,9 +4351,10 @@ canvas {
 }
 
 .searchbar .search-input {
-  min-width: 20%;
-  padding: 5px;
-  font-family: arial;
+  width: min(100%, 320px);
+  min-width: 0;
+  padding: 10px;
+  font-family: Arial, sans-serif;
   background-color: rgba(120, 70, 255, 0.3);
   border-radius: 15px;
   border: 1px solid #007bff;
@@ -4691,7 +4364,7 @@ canvas {
 /* gestione input range con doppia manopola */
 .range-container {
   position: relative;
-  width: 50%;
+  width: min(100%, 320px);
   margin: 20px auto;
   height: 30px;
   text-align: center;
@@ -4710,7 +4383,7 @@ canvas {
 }
 
 .big {
-  width: 250px;
+  width: min(100%, 250px);
 }
 
 .slider-range {
@@ -4768,7 +4441,7 @@ input[type="text"] {
 
 /* gestisco i colori della barra e della manopola per i vari browser */
 input[type="range"] {
-  width: 50%;
+  width: 100%;
   border-radius: 4px;
   background: #4b156b;
   outline: none;
@@ -4822,10 +4495,10 @@ input[type="range"]::-webkit-slider-runnable-track {
 
 /* GRID */
 .mw-card-searchs-grid {
-  max-width: 1200px;
+  width: min(100%, 1200px);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 35px;
 }
 
@@ -4848,9 +4521,9 @@ input[type="range"]::-webkit-slider-runnable-track {
     box-shadow 0.35s ease,
     border-color 0.35s ease;
   overflow: hidden;
-  width: min(100%, 308px);
-  min-width: 280px;
-  max-width: 308px;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
 }
 
 .mw-card-search-inner {
@@ -4990,49 +4663,21 @@ input[type="range"]::-webkit-slider-runnable-track {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* ========== RESPONSIVE ========== */
-
-/* Tablet */
 @media (max-width: 1024px) {
-  .mw-subtitle-s {
-    font-size: 2rem;
-  }
-}
-
-/* Mobile Large */
-@media (max-width: 768px) {
   .mw-cards-grid-s {
     gap: 25px;
   }
-
-  .filter-btn-s {
-    padding: 10px 25px;
-    font-size: 15px;
-  }
-
-  .mw-subtitle-s {
-    font-size: 1.8rem;
-  }
 }
 
-/* Mobile Small */
 @media (max-width: 480px) {
   .filter-dropdown-s {
     padding: 0 15px;
   }
 
-  .filter-btn-s {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-
   .mw-cards-grid-s {
     gap: 20px;
     padding: 0 15px;
-  }
-
-  .mw-subtitle-s {
-    font-size: 1.5rem;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   html,
@@ -5285,6 +4930,12 @@ input[type="range"]::-webkit-slider-runnable-track {
   .mw-img-saturno {
     width: 132%;
     height: 264px !important;
+  }
+  .catalog-toolbar {
+    flex-flow: column nowrap;
+  }
+  .mw-header h1 {
+    padding-top: 0;
   }
 }
 

@@ -3,7 +3,7 @@ import HomeIntroSection from "../Components/MacroComponents/Home/HomeIntroSectio
 import HomeFeatureCards from "../Components/MacroComponents/Home/HomeFeatureCards.jsx";
 import HomeGalaxySection from "../Components/MacroComponents/Home/HomeGalaxySection.jsx";
 import HomePopularPlanetsSection from "../Components/MacroComponents/Home/HomePopularPlanetsSection.jsx";
-import { useMemo, useRef, useEffect, useCallback, useState } from "react";
+import { useMemo } from "react";
 import QueryState from "../Components/app/QueryState.jsx";
 import { useAllPlanetsQuery } from "../hooks/queries/useCommerceQueries.js";
 import usePageMeta from "../hooks/app/usePageMeta.js";
@@ -15,36 +15,6 @@ export default function HomePage() {
     "Discover habitable worlds",
     "Browse premium space property packages, curated galaxies, and gift-ready planet certificates.",
   );
-  const contentRef = useRef(null);
-
-  const [containerHeight, setContainerHeight] = useState("100vh");
-  const updateHeight = useCallback(() => {
-    if (!contentRef.current) return;
-
-    const contentHeight = contentRef.current.scrollHeight;
-    const windowHeight = window.innerHeight;
-    const calculatedHeight = Math.max(contentHeight + 42, windowHeight);
-
-    setContainerHeight(`${calculatedHeight}px`);
-  }, []);
-
-  useEffect(() => {
-    updateHeight();
-    const resizeObserver = new ResizeObserver(() => {
-      updateHeight();
-    });
-
-    if (contentRef.current) {
-      resizeObserver.observe(contentRef.current);
-    }
-
-    window.addEventListener("resize", updateHeight);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", updateHeight);
-    };
-  }, [updateHeight]);
 
   const planetsQuery = useAllPlanetsQuery();
 
@@ -56,27 +26,9 @@ export default function HomePage() {
   }, [planetsQuery.data]);
 
   return (
-    <div
-      className="container-jumbotrone home-shell"
-      style={{ height: containerHeight }}
-    >
+    <div className="container-jumbotrone home-shell">
       <HomeBackground />
-      <div
-        ref={contentRef}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          width: "100%",
-          zIndex: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          pointerEvents: "none",
-          paddingTop: 200,
-        }}
-      >
+      <div className="home-content-wrapper">
         <HomeIntroSection />
         <HomeFeatureCards />
         <HomeGalaxySection />
